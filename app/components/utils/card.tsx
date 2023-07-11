@@ -8,7 +8,7 @@ type Props = {
   image: any;
 };
 
-export const SettingCard: FC<Props> = ({ name, link, image }) => {
+export const Card: FC<Props> = ({ name, link, image }) => {
   const [active, setActive] = useState(false);
 
   const handleMouseOver = (

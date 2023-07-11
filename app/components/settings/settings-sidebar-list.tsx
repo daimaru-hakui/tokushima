@@ -9,7 +9,7 @@ import {
   PiBuildingsBold,
 } from "react-icons/pi";
 
-export const SidebarList: FC = () => {
+export const SettingsSidebarList: FC = () => {
   const pathname = usePathname();
   const list = [
     { name: "マスター登録一覧", link: "/settings", image: <PiListDashes /> },

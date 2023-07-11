@@ -5,9 +5,20 @@ import {
   PiFactoryBold,
   PiBuildingsBold,
 } from "react-icons/pi";
-import { SettingCard } from "../components/settings/card";
+import { Card } from "../components/utils/card";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-const SettingPage: NextPage = () => {
+const SettingPage: NextPage = async() => {
+  const supabase = createServerComponentClient({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) {
+    redirect("/auth/login");
+  }
+
   const list = [
     {
       name: "工場登録",
@@ -29,7 +40,7 @@ const SettingPage: NextPage = () => {
   return (
     <div className="flex flex-wrap gap-6 justify-center">
       {list.map(({ name, link, image }) => (
-        <SettingCard key={name} name={name} link={link} image={image} />
+        <Card key={name} name={name} link={link} image={image} />
       ))}
     </div>
   );

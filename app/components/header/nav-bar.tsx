@@ -11,6 +11,7 @@ export default async function NavBar() {
   } = await supabase.auth.getSession();
   const menuList = [
     { name: "HOME", link: "/" },
+    { name: "修理伝票", link: "/repairs" },
     { name: "マスター登録", link: "/settings" },
   ];
 
@@ -25,7 +26,7 @@ export default async function NavBar() {
 
         "
       >
-        <div>修理伝票</div>
+        <div>徳島工場</div>
         <div className="flex items-center space-x-6">
           {session &&
             menuList.map(({ name, link }) => (
