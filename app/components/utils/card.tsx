@@ -34,10 +34,11 @@ export const Card: FC<Props> = ({ name, link, image }) => {
       <div className="p-6 text-black bg-white border border-gray-200 rounded-lg shadow hover:text-white hover:bg-slate-800">
         <div
           style={{ color: active ? "white" : "black", fontSize: "50px" }}
+          className="flex justify-center"
         >
           {image}
         </div>
-        <div>{name}</div>
+        <div className="mt-3">{name}</div>
       </div>
     </Link>
   );

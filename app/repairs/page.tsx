@@ -24,7 +24,7 @@ const Repairs = () => {
         <RepairsSidebarList />
       </Sidebar>
       <main className="w-full md:w-8/12 p-4 mt-24 md:ml-64">
-        <div className="">
+    
           <div className="relative overflow-x-auto shadow-sm">
             <div className="p-6 min-w-[800px] bg-white rounded-md">
 
@@ -46,7 +46,7 @@ const Repairs = () => {
               </tbody>
             </table>
             </div>
-          </div>
+         
         </div>
       </main>
     </div>
