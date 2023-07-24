@@ -19,11 +19,11 @@ export default async function SettingLayout({
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-between">
       <Sidebar>
         <SettingsSidebarList />
       </Sidebar>
-      <main className="w-full md:w-8/12 p-4 mt-24 md:ml-64">{children}</main>
+      <main className="w-full p-4 mt-12">{children}</main>
     </div>
   );
 }

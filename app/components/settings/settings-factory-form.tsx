@@ -12,7 +12,7 @@ type Inputs = {
   tel: string;
 };
 
-export const SettingsDeliveryForm = () => {
+export const SettingsFactoryForm = () => {
   const supabase = createClientComponentClient();
   const {
     register,
@@ -34,11 +34,11 @@ export const SettingsDeliveryForm = () => {
         <TextInput
           className="mt-4"
           type="text"
-          label="納品先名"
+          label="工場名"
           register={{ ...register("name", { required: true }) }}
         />
         {errors.name && (
-          <div className="ml-2 text-red-500">納品先名を入力してください</div>
+          <div className="ml-2 text-red-500">工場名を入力してください</div>
         )}
 
         <TextInput
@@ -64,7 +64,7 @@ export const SettingsDeliveryForm = () => {
           <Button size="sm" type="submit" bg="bg-black" className="mt-10">
             登録
           </Button>
-          <Link href="/settings/delivery-places">
+          <Link href="/settings/factories">
             <Button size="sm" color="text-black" className="mt-10 border border-black">
               戻る
             </Button>

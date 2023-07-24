@@ -12,7 +12,7 @@ type Inputs = {
   tel: string;
 };
 
-export const SettingsDeliveryForm = () => {
+export const SettingsCustomerForm = () => {
   const supabase = createClientComponentClient();
   const {
     register,
@@ -34,11 +34,11 @@ export const SettingsDeliveryForm = () => {
         <TextInput
           className="mt-4"
           type="text"
-          label="納品先名"
+          label="顧客名"
           register={{ ...register("name", { required: true }) }}
         />
         {errors.name && (
-          <div className="ml-2 text-red-500">納品先名を入力してください</div>
+          <div className="ml-2 text-red-500">顧客名を入力してください</div>
         )}
 
         <TextInput

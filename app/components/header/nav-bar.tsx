@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MenuButton } from "./menu-button";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { DrawerButton } from "./drawer-button";
 
 export default async function NavBar() {
   const supabase = createServerComponentClient({ cookies });
@@ -22,11 +23,14 @@ export default async function NavBar() {
         fixed top-0 z-50 w-full bg-white border-b border-gray-200
         w-full h-[calc(50px)] px-6 
         flex items-center justify-between 
-        bg-white shadow-sm
-
-        "
+        bg-white shadow-sm"
       >
-        <div>徳島工場</div>
+        <div className="flex items-center gap-6">
+          <div><DrawerButton/></div>
+          <Link href="/" className="cursor-pointer">
+            徳島工場
+          </Link>
+        </div>
         <div className="flex items-center space-x-6">
           {session &&
             menuList.map(({ name, link }) => (
