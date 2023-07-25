@@ -16,6 +16,6 @@ type SidebarStore = {
 };
 
 export const useSidebarStore = create<SidebarStore>((set) => ({
-  isSidebar: true,
+  isSidebar: false,
   setIsSidebar: (payload) => set(({ isSidebar: payload })),
 }));
