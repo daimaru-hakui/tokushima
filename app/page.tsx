@@ -8,7 +8,6 @@ export default async function Home() {
   if(!session) {
     redirect('/auth/login')
   }
-  console.log(session)
   return (
     <main className="flex min-h-[calc(100vh-50px)] flex-col items-center justify-between p-24">
       

@@ -17,16 +17,16 @@ export const RepairsSidebarList = () => {
     const pathname = usePathname();
     const list = [
         { name: "修理伝票メニュー", link: "/repairs", image: <PiListDashes /> },
-        { name: "修理伝票一覧", link: "/repairs/list", image: <PiNotepadBold /> },
+        { name: "修理伝票一覧", link: "/repairs", image: <PiNotepadBold /> },
         { name: "修理伝票作成", link: "/repairs/new", image: <PiPlusCircleBold /> },
         {
           name: "テンプレート一覧",
-          link: "/repairs/templates",
+          link: "/repairs",
           image: <PiNotebookBold />,
         },
         {
           name: "テンプレート登録",
-          link: "/repairs/templates/new",
+          link: "/repairs",
           image: <PiFilePlusBold />,
         },
       ];

@@ -1,9 +1,11 @@
 import NavBar from "./components/header/nav-bar";
-import { DrawerSidebar } from "./components/sidebar/drawer-sidebar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata = {
   title: "Create Next App",
