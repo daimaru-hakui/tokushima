@@ -26,19 +26,23 @@ export default async function NavBar() {
         bg-white shadow-sm"
       >
         <div className="flex items-center gap-6">
-          <div><DrawerButton/></div>
+          <div className="block lg:hidden">
+            <DrawerButton />
+          </div>
           <Link href="/" className="cursor-pointer">
             徳島工場
           </Link>
         </div>
         <div className="flex items-center space-x-6">
-          {session &&
-            menuList.map(({ name, link }) => (
-              <Link key={name} href={link} className="text-black">
-                <div>{name}</div>
-              </Link>
-            ))}
-          <MenuButton menuList={menuList} />
+          <div className="hidden lg:flex space-x-6">
+            {session &&
+              menuList.map(({ name, link }) => (
+                <Link key={name} href={link} className="text-black">
+                  <div>{name}</div>
+                </Link>
+              ))}
+          </div>
+        <MenuButton menuList={menuList} />
         </div>
       </nav>
     </header>

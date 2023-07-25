@@ -1,4 +1,5 @@
 'use client'
+import { useDrawerStore } from '@/store';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react'
@@ -9,8 +10,10 @@ import {
     PiListDashes,
     PiFilePlusBold,
   } from "react-icons/pi";
+  
 
 export const RepairsSidebarList = () => {
+  const setIsDrawer = useDrawerStore((state) => state.setIsDrawer);
     const pathname = usePathname();
     const list = [
         { name: "修理伝票メニュー", link: "/repairs", image: <PiListDashes /> },
@@ -30,7 +33,7 @@ export const RepairsSidebarList = () => {
   return (
     <ul className="space-y-2 font-medium">
     {list.map(({ name, link, image }) => (
-      <li key={name}>
+      <li key={name} onClick={() => setIsDrawer(false)}>
         <Link
           href={link}
           className={`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 ${

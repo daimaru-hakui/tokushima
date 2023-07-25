@@ -1,5 +1,5 @@
 "use client";
-import { FC, Fragment } from "react";
+import { FC } from "react";
 import { Menu } from "@mantine/core";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";

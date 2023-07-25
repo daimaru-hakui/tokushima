@@ -4,6 +4,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Sidebar } from "../components/sidebar/sidebar";
 import { SettingsSidebarList } from "../components/settings/settings-sidebar-list";
+import { Space } from "../components/utils/space";
+import { Main } from "../components/main/main";
+import { DrawerSidebar } from "../components/sidebar/drawer-sidebar";
 
 export default async function SettingLayout({
   children,
@@ -19,11 +22,17 @@ export default async function SettingLayout({
   }
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between relative">
+      <DrawerSidebar>
+        <SettingsSidebarList />
+      </DrawerSidebar>
       <Sidebar>
         <SettingsSidebarList />
       </Sidebar>
-      <main className="w-full p-4 mt-12">{children}</main>
+      <Main>
+        <Space />
+        {children}
+      </Main>
     </div>
   );
 }

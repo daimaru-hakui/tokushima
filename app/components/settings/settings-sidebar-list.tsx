@@ -1,4 +1,5 @@
 "use client";
+import { useDrawerStore } from "@/store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { FC } from "react";
@@ -10,6 +11,7 @@ import {
 } from "react-icons/pi";
 
 export const SettingsSidebarList: FC = () => {
+  const setIsDrawer = useDrawerStore((state) => state.setIsDrawer);
   const pathname = usePathname();
   const list = [
     { name: "マスター登録一覧", link: "/settings", image: <PiListDashes /> },
@@ -28,7 +30,7 @@ export const SettingsSidebarList: FC = () => {
   return (
     <ul className="space-y-2 font-medium">
       {list.map(({ name, link, image }) => (
-        <li key={name}>
+        <li key={name} onClick={() => setIsDrawer(false)}>
           <Link
             href={link}
             className={`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 ${

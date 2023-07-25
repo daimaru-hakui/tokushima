@@ -1,4 +1,5 @@
 import NavBar from "./components/header/nav-bar";
+import { DrawerSidebar } from "./components/sidebar/drawer-sidebar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 

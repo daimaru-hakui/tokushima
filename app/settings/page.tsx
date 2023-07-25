@@ -38,7 +38,7 @@ const SettingPage: NextPage = async() => {
   ];
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="flex flex-wrap gap-6 justify-center w-full">
       {list.map(({ name, link, image }) => (
         <Card key={name} name={name} link={link} image={image} />
       ))}

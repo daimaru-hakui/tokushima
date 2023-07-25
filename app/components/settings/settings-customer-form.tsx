@@ -64,7 +64,7 @@ export const SettingsCustomerForm = () => {
           <Button size="sm" type="submit" bg="bg-black" className="mt-10">
             登録
           </Button>
-          <Link href="/settings/delivery-places">
+          <Link href="/settings/customers">
             <Button size="sm" color="text-black" className="mt-10 border border-black">
               戻る
             </Button>
