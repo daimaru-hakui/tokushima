@@ -6,7 +6,7 @@ type DrawerStore = {
 };
 
 export const useDrawerStore = create<DrawerStore>((set) => ({
-  isDrawer: true,
+  isDrawer: false,
   setIsDrawer: (payload) => set(({ isDrawer: payload })),
 }));
 
@@ -16,6 +16,6 @@ type SidebarStore = {
 };
 
 export const useSidebarStore = create<SidebarStore>((set) => ({
-  isSidebar: false,
+  isSidebar: true,
   setIsSidebar: (payload) => set(({ isSidebar: payload })),
 }));

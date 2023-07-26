@@ -1,12 +1,13 @@
 "use client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { Button } from "../utils/button";
 import { TextInput } from "../utils/text-input";
 import Link from "next/link";
 import { Input } from "../utils/input";
 import { PiPlusBold } from "react-icons/pi";
+import { RepairsDetailForm } from "./repairs-detail-form";
 
 type Inputs = {
   factory: string;
@@ -14,11 +15,21 @@ type Inputs = {
   deadline: string;
   customer: string;
   status: string;
+  repair_details: {
+    maker: string;
+    productName: string;
+    size: string;
+    quantity: number;
+    comment: string;
+  }[];
 };
 
 export const RepairForm = () => {
   const supabase = createClientComponentClient();
   const {
+    control,
+    watch,
+    getValues,
     register,
     handleSubmit,
     formState: { errors },
@@ -29,6 +40,13 @@ export const RepairForm = () => {
       deadline: "",
       customer: "",
       status: "PICKING",
+      repair_details: [{
+        maker: "",
+        productName: "",
+        size: "",
+        quantity: 0,
+        comment: "",
+      }]
     },
   });
 
@@ -122,48 +140,16 @@ export const RepairForm = () => {
           </Button>
         </div>
 
-        <div className="mt-6 overflow-auto">
-          <table style={{ minWidth: "800px" }} className="table-auto w-full">
-            <thead>
-              <tr>
-                <th className="px-1 text-sm text-left">メーカー</th>
-                <th className="px-1 text-sm text-left">品名</th>
-                <th className="px-1 text-sm text-left">サイズ</th>
-                <th className="px-1 text-sm text-left">数量</th>
-                <th className="px-1 text-sm text-left">備考</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="">
-                <td className="p-1 w-40">
-                  <Input />
-                </td>
-                <td className="p-1 w-96">
-                  <Input />
-                </td>
-                <td className="p-1 w-20">
-                  <Input />
-                </td>
-                <td className="p-1 w-20">
-                  <Input />
-                </td>
-                <td style={{ minWidth: "200px" }} className="p-1 ">
-                  <Input />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="w-full mt-6 flex justify-center">
-          <Button type="button" bg="bg-black">
-            <PiPlusBold className="mr-1" />
-            追加
-          </Button>
-        </div>
+        <RepairsDetailForm
+          control={control}
+          register={register}
+          getValues={getValues}
+          watch={watch}
+        />
 
         <div className="mt-6">
-          <textarea className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></textarea>
+          <div className=" mb-2 font-bold text-sm">備考</div>
+          <textarea className="h-36 leading-6 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"></textarea>
         </div>
 
         <div className="flex justify-center gap-4">

@@ -2,8 +2,10 @@ import { NextPage } from "next";
 import React from "react";
 import {
   PiWarehouseBold,
+  PiPlusCircleBold,
   PiFactoryBold,
   PiBuildingsBold,
+
 } from "react-icons/pi";
 import { Card } from "../components/utils/card";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";

@@ -1,48 +1,53 @@
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import React from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { Card } from "../components/utils/card";
+import {
+  PiPlusCircleBold,
+  PiNotepadBold,
+  PiNotebookBold,
+  PiListDashes,
+  PiFilePlusBold,
+} from "react-icons/pi";
 
-const Repairs = () => {
+const Repairs = async() => {
+  const supabase = createServerComponentClient({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) {
+    redirect("/auth/login");
+  }
+
   const list = [
     {
-      serialNumber: 3,
-      customer: "共同リネンサプライ㈱",
+      name: "修理伝票一覧",
+      link: "/repairs/list",
+      image: <PiNotepadBold />,
     },
     {
-      serialNumber: 2,
-      customer: "日本リプロ㈱",
+      name: "修理伝票作成",
+      link: "/repairs/new",
+      image: <PiPlusCircleBold />,
     },
     {
-      serialNumber: 1,
-      customer: "総合開発",
+      name: "テンプレート一覧",
+      link: "/repairs/templates",
+      image: <PiNotebookBold />,
+    },
+    {
+      name: "テンプレート作成",
+      link: "/repairs/templates/new",
+      image: <PiFilePlusBold />,
     },
   ];
-
   return (
-    <div className="mx-auto p-6 w-full max-w-[1100px] shadow-sm bg-white rounded-md">
-        <table className="w-full  text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase">
-            <tr className=" text-xs border-b border-slate-200">
-              <th scope="col" className="px-6 py-3">
-                伝票NO.
-              </th>
-              <th scope="col" className="px-6 py-3 text-left">
-                顧客名
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {list.map(({ serialNumber, customer }) => (
-              <tr
-                key={serialNumber}
-                className="text-md border-b border-slate-200"
-              >
-                <td className="px-6 py-3">{serialNumber}</td>
-                <td className="px-6 py-3 text-left">{customer}</td>
-                <td></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="flex flex-wrap gap-6 justify-center w-full">
+      {list.map(({ name, link, image }) => (
+        <Card key={name} name={name} link={link} image={image} />
+      ))}
+    </div>
   );
 };
 
