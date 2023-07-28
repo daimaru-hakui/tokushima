@@ -1,13 +1,14 @@
 "use client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import React from "react";
-import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
+import React, { FC } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../utils/button";
-import { TextInput } from "../utils/text-input";
+import { TextInput } from "../utils/input/text-input";
 import Link from "next/link";
-import { Input } from "../utils/input";
-import { PiPlusBold } from "react-icons/pi";
 import { RepairsDetailForm } from "./repairs-detail-form";
+import { Repair } from "@/types";
+import { RepairsFactoryModal } from "./repairs-factory-modal";
+import { RepairsDeliveryModal } from "./repairs-delivery-modal";
 
 type Inputs = {
   factory: string;
@@ -24,29 +25,32 @@ type Inputs = {
   }[];
 };
 
-export const RepairForm = () => {
+export const RepairForm: FC = () => {
   const supabase = createClientComponentClient();
   const {
     control,
     watch,
     getValues,
+    setValue,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<Repair>({
     defaultValues: {
       factory: "",
       delivery: "",
       deadline: "",
       customer: "",
       status: "PICKING",
-      repair_details: [{
-        maker: "",
-        productName: "",
-        size: "",
-        quantity: 0,
-        comment: "",
-      }]
+      repair_details: [
+        {
+          maker: "",
+          productName: "",
+          size: "",
+          quantity: 0,
+          comment: "",
+        },
+      ],
     },
   });
 
@@ -59,23 +63,33 @@ export const RepairForm = () => {
       <div className="flex flex-col">
         <div className="flex gap-4 flex-col md:flex-row">
           <div className="flex-1">
-            <TextInput
-              className="mt-4"
-              type="text"
-              label="工場名"
-              register={{ ...register("factory", { required: true }) }}
-            />
+            <div className="flex gap-2 items-end">
+              <TextInput
+                className="mt-4 flex-1"
+                type="text"
+                label="工場名"
+                register={{ ...register("factory", { required: true }) }}
+              />
+              <div>
+                <RepairsFactoryModal setValue={setValue} />
+              </div>
+            </div>
             {errors.factory && (
               <div className="ml-2 text-red-500">工場名を入力してください</div>
             )}
           </div>
           <div className="flex-1">
-            <TextInput
-              className="mt-4"
-              type="text"
-              label="納品先"
-              register={{ ...register("delivery", { required: true }) }}
-            />
+            <div className="flex gap-2 items-end">
+              <TextInput
+                className="mt-4 flex-1"
+                type="text"
+                label="納品先"
+                register={{ ...register("delivery", { required: true }) }}
+              />
+              <div>
+                <RepairsDeliveryModal setValue={setValue} />
+              </div>
+            </div>
             {errors.delivery && (
               <div className="ml-2 text-red-500">納品先を入力してください</div>
             )}

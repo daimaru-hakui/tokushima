@@ -3,7 +3,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../utils/button";
-import { TextInput } from "../utils/text-input";
+import { TextInput } from "../utils/input/text-input";
 import Link from "next/link";
 
 type Inputs = {

@@ -9,7 +9,7 @@ type Props = {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   w?: string;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e:any) => void;
 };
 
 export const Button: FC<Props> = ({
@@ -25,7 +25,7 @@ export const Button: FC<Props> = ({
   const sizeObj = {
     xs: 'px-2 py-1 text-xs',
     sm: 'px-3 py-2 text-sm',
-    md: 'px-4 p-[10px] text-base',
+    md: 'px-4 p-[9px] text-base',
     lg: 'px-5 py-3 text-lg',
   };
 

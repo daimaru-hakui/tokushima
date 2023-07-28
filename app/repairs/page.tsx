@@ -1,17 +1,16 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import React from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Card } from "../components/utils/card";
 import {
   PiPlusCircleBold,
   PiNotepadBold,
   PiNotebookBold,
-  PiListDashes,
   PiFilePlusBold,
 } from "react-icons/pi";
+import { CardContainer } from "../components/utils/card-container";
+import { NextPage } from "next";
 
-const Repairs = async() => {
+const Repairs:NextPage = async () => {
   const supabase = createServerComponentClient({ cookies });
   const {
     data: { session },
@@ -42,13 +41,7 @@ const Repairs = async() => {
       image: <PiFilePlusBold />,
     },
   ];
-  return (
-    <div className="flex flex-wrap gap-6 justify-center w-full">
-      {list.map(({ name, link, image }) => (
-        <Card key={name} name={name} link={link} image={image} />
-      ))}
-    </div>
-  );
+  return <CardContainer list={list} />;
 };
 
 export default Repairs;

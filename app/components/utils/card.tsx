@@ -27,7 +27,7 @@ export const Card: FC<Props> = ({ name, link, image }) => {
     <Link
       key={name}
       href={link}
-      className="w-full sm:max-w-sm text-center"
+      className="w-full text-center"
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >

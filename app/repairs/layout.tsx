@@ -7,7 +7,6 @@ import { RepairsSidebarList } from "../components/repairs/repairs-sidebar-list";
 import { Space } from "../components/utils/space";
 import { Main } from "../components/main/main";
 import { DrawerSidebar } from "../components/sidebar/drawer-sidebar";
-import { SettingsSidebarList } from "../components/settings/settings-sidebar-list";
 
 export default async function RepairLayout({
   children,
@@ -23,17 +22,19 @@ export default async function RepairLayout({
   }
 
   return (
-    <div className="flex justify-between relative">
-      <DrawerSidebar>
-        <RepairsSidebarList />
-      </DrawerSidebar>
-      <Sidebar>
-        <RepairsSidebarList />
-      </Sidebar>
-      <Main>
-        <Space />
-        {children}
-      </Main>
-    </div>
+    <>
+      <div className="flex justify-between relative">
+        <DrawerSidebar>
+          <RepairsSidebarList />
+        </DrawerSidebar>
+        <Sidebar>
+          <RepairsSidebarList />
+        </Sidebar>
+        <Main>
+          <Space />
+          {children}
+        </Main>
+      </div>
+    </>
   );
 }

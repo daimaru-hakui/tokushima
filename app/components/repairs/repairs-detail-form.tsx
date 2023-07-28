@@ -1,6 +1,6 @@
 "use client";
 import React, { FC } from "react";
-import { Input } from "../utils/input";
+import { Input } from "../utils/input/input";
 import {
   Control,
   UseFormGetValues,
@@ -10,6 +10,7 @@ import {
 } from "react-hook-form";
 import { Button } from "../utils/button";
 import { PiPlusBold } from "react-icons/pi";
+import { FaTrashAlt } from "react-icons/fa";
 
 type Inputs = {
   factory: string;
@@ -49,9 +50,13 @@ export const RepairsDetailForm: FC<Props> = ({ control, register }) => {
     });
   };
 
+  const removeDetail = (idx: number) => {
+    remove(idx);
+  };
+
   return (
     <>
-      <div className="mt-6 overflow-auto">
+      <div className="mt-12 overflow-auto">
         <table style={{ minWidth: "800px" }} className="table-auto w-full">
           <thead>
             <tr>
@@ -60,6 +65,7 @@ export const RepairsDetailForm: FC<Props> = ({ control, register }) => {
               <th className="px-1 text-sm text-left">サイズ</th>
               <th className="px-1 text-sm text-left">数量</th>
               <th className="px-1 text-sm text-left">備考</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -91,6 +97,14 @@ export const RepairsDetailForm: FC<Props> = ({ control, register }) => {
                   <Input
                     register={{ ...register(`repair_details.${idx}.comment`) }}
                   />
+                </td>
+                <td>
+                  {idx !== 0 && (
+                    <FaTrashAlt
+                      className="ml-2 cursor-pointer"
+                      onClick={() => removeDetail(idx)}
+                    />
+                  )}
                 </td>
               </tr>
             ))}

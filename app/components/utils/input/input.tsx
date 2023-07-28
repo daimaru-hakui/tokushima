@@ -2,18 +2,22 @@ import React, { FC } from "react";
 
 type Props = {
   type?: "text" | "password" | "date";
+  value?: string;
   placeholder?: string;
   label?: string;
   register?: any;
   className?: string;
+  onChange?:Function
 };
 
 export const Input: FC<Props> = ({
   type = "text",
+  value,
   placeholder = "",
   label = "",
   register,
   className,
+  onChange
 }) => {
   return (
     <div className={className}>
@@ -28,9 +32,11 @@ export const Input: FC<Props> = ({
       <input
         type={type}
         id={label}
+        value={value}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder={placeholder}
         {...register}
+        onChange={onChange}
       />
     </div>
   );

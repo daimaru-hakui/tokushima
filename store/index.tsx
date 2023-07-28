@@ -19,3 +19,4 @@ export const useSidebarStore = create<SidebarStore>((set) => ({
   isSidebar: true,
   setIsSidebar: (payload) => set(({ isSidebar: payload })),
 }));
+
