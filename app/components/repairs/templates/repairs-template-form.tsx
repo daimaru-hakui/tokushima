@@ -7,7 +7,9 @@ import { RepairsDeliveryModal } from "../repairs-delivery-modal";
 import { Button } from "../../utils/button";
 import { BiCloudUpload } from "react-icons/bi";
 
-type Inputs = {};
+type Inputs = {
+  
+};
 
 export const RepairsTemplateForm: FC = () => {
   const {
