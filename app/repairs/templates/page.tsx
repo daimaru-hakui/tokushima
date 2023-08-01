@@ -4,7 +4,7 @@ import React from "react";
 const RepairTemplates = () => {
   const templates = [
     {
-      id: 1,
+      id: 0,
       factory: {
         id: 1,
         name: "徳島工場",
@@ -19,7 +19,7 @@ const RepairTemplates = () => {
       images: [{ path: "/images/20230731.png" }],
     },
     {
-      id: 2,
+      id: 1,
       factory: {
         id: 1,
         name: "徳島工場",
@@ -34,7 +34,7 @@ const RepairTemplates = () => {
       images: [{ path: "/images/20230731.png" }],
     },
     {
-      id: 3,
+      id: 2,
       factory: {
         id: 1,
         name: "大野制帽所",
@@ -49,7 +49,7 @@ const RepairTemplates = () => {
       images: [{ path: "/images/20230731.png" }],
     },
     {
-      id: 4,
+      id: 3,
       factory: {
         id: 1,
         name: "徳島工場",
