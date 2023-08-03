@@ -1,20 +1,19 @@
-import React from "react";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import React, { FC } from "react";
+import { cookies } from "next/headers";
+import type { Database } from "../../../lib/database.types";
 
-export const SettingsDeliveryList = () => {
-  const list = [
-    {
-      id: 1,
-      name: "配送センター",
-      address: "大阪府大阪市中央区日本橋1丁目22番15号",
-      tel: "06-6641-0891",
-    },
-    {
-      id: 2,
-      name: "徳島工場",
-      address: "〒779-3131 徳島県徳島市下町本丁660",
-      tel: "088-644-0301",
-    },
-  ];
+type DeliveryPlace = Database["public"]["Tables"]["delivery_places"]["Row"];
+
+async function getDeliveryPlace() {
+  const supabase = createServerComponentClient({ cookies });
+  let { data, error }: { data: DeliveryPlace[] | null; error: any } =
+    await supabase.from("delivery_places").select("*");
+  return data;
+}
+
+export const SettingsDeliveryList: FC = async () => {
+  const deliveryPlaces = await getDeliveryPlace();
   return (
     <div className="relative overflow-x-auto shadow-sm">
       <div className="p-6 min-w-[800px] bg-white rounded-md">
@@ -36,11 +35,8 @@ export const SettingsDeliveryList = () => {
             </tr>
           </thead>
           <tbody>
-            {list.map(({ id, name,address,tel }) => (
-              <tr
-                key={id}
-                className="text-md border-b border-slate-200"
-              >
+            {deliveryPlaces?.map(({ id, name, address, tel }) => (
+              <tr key={id} className="text-md border-b border-slate-200">
                 <td className="px-6 py-3">{id}</td>
                 <td className="px-6 py-3">{name}</td>
                 <td className="px-6 py-3">{address}</td>

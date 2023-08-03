@@ -1,26 +1,14 @@
-import React from "react";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import React, { FC } from "react";
+import { cookies } from "next/headers";
+import { SettingsFactoryEdit } from "./settings-factory-edit";
 
-export const SettingsFactoryList = () => {
-  const list = [
-    {
-      id: 1,
-      name: "徳島工場",
-      address: "〒779-3131 徳島県徳島市下町本丁660",
-      tel: "088-644-0301",
-    },
-    {
-      id: 2,
-      name: "大野制帽所",
-      address: "〒580-0044 大阪府松原市田井城4丁目145-18",
-      tel: "072-332-7708",
-    },
-    {
-      id: 3,
-      name: "高田や刺繍",
-      address: "〒550-0023 大阪府大阪市西区千代崎1丁目24-13",
-      tel: "06-6582-3434",
-    },
-  ];
+export const SettingsFactoryList: FC = async () => {
+  const supabase = createServerComponentClient({ cookies });
+  const { data: factories, error } = await supabase
+    .from("factories")
+    .select("*");
+
   return (
     <div className="relative overflow-x-auto shadow-sm">
       <div className="p-6 min-w-[800px] bg-white rounded-md">
@@ -39,17 +27,24 @@ export const SettingsFactoryList = () => {
               <th scope="col" className="px-6 py-3 text-left">
                 TEL
               </th>
+              <th scope="col" className="px-6 py-3 text-left">
+                編集
+              </th>
             </tr>
           </thead>
           <tbody>
-            {list.map(({ id, name, address, tel }) => (
-              <tr key={id} className="text-md border-b border-slate-200">
-                <td className="px-6 py-3">{id}</td>
-                <td className="px-6 py-3">{name}</td>
-                <td className="px-6 py-3">{address}</td>
-                <td className="px-6 py-3">{tel}</td>
-              </tr>
-            ))}
+            {factories &&
+              factories.map((factory) => (
+                <tr key={factory.id} className="text-md border-b border-slate-200">
+                  <td className="px-6 py-3">{factory.id}</td>
+                  <td className="px-6 py-3">{factory.name}</td>
+                  <td className="px-6 py-3">{factory.address}</td>
+                  <td className="px-6 py-3">{factory.tel}</td>
+                  <td className="px-6 py-3">
+                    <SettingsFactoryEdit factory={factory} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

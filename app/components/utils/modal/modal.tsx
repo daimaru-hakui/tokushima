@@ -49,7 +49,7 @@ export const Modal: FC<Props> = ({
   return (
     <>
       <Button type="button" bg="bg-black" size={size} onClick={(e)=>onOpen(e)}>
-        検索
+        {title}
       </Button>
       {isModal && (
         <div id="modal">
