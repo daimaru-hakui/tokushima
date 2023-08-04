@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import styles from "./modal.module.css";
 import { Button } from "../button";
 import { MdClose } from "react-icons/md";
@@ -19,8 +19,8 @@ export const Modal: FC<Props> = ({
   isModal,
   setIsModal,
 }) => {
-  const [isActive, setIsActive] = useState(false);
 
+  const onOpen = () => setIsModal(true);
   const onClose = () => {
     const modal = document.getElementById("modal");
     if (modal) {
@@ -31,7 +31,6 @@ export const Modal: FC<Props> = ({
           i = i - 0.02;
           if (i < 0) {
             setIsModal(false);
-            setIsActive(false);
             return;
           }
           fadeOut();
@@ -41,24 +40,16 @@ export const Modal: FC<Props> = ({
     }
   };
 
-  const onOpen = (e:any) => {
-    setIsModal(true);
-    setIsActive(true);
-  };
-
   return (
     <>
-      <Button type="button" bg="bg-black" size={size} onClick={(e)=>onOpen(e)}>
-        {title}
-      </Button>
       {isModal && (
         <div id="modal">
           <div
-            className={`modal ${styles.overlay} ${isActive && styles.isActive}`}
+            className={`modal ${styles.overlay} ${isModal && styles.isActive}`}
             onClick={onClose}
           ></div>
           <div
-            className={`modal ${styles.content} ${isActive && styles.isActive}`}
+            className={`modal ${styles.content} ${isModal && styles.isActive}`}
           >
             <div className={`${styles.header}`}>
               <div className={`${styles.title}`}>{title}</div>

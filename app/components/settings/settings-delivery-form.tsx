@@ -5,10 +5,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../utils/button";
 import { TextInput } from "../utils/input/text-input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   id: string;
   name: string;
+  kana: string;
   address: string;
   tel: string;
 };
@@ -16,7 +18,7 @@ type Inputs = {
 type Props = {
   pageType: "new" | "edit";
   defaultValues: Inputs;
-  setIsModal: (payload: boolean) => void;
+  setIsModal?: (payload: boolean) => void;
 };
 
 export const SettingsDeliveryForm: FC<Props> = ({
@@ -24,6 +26,7 @@ export const SettingsDeliveryForm: FC<Props> = ({
   defaultValues,
   setIsModal,
 }) => {
+  const router = useRouter();
   const supabase = createClientComponentClient();
   const [isActive, setIsActive] = useState(false);
   const {
@@ -34,7 +37,54 @@ export const SettingsDeliveryForm: FC<Props> = ({
     defaultValues,
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {};
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const result = confirm(
+      `${pageType === "new" ? "登録" : "更新"}して宜しいでしょうか`
+    );
+    if (!result) return;
+    if (pageType === "new") {
+      await addDeliveryPlace(data);
+      router.push("/settings/delivery-places");
+      router.refresh();
+    } else {
+      await updateeliveryPlace(data);
+      onClose();
+      router.refresh();
+    }
+  };
+
+  const addDeliveryPlace = async ({ name, kana, address, tel }: Inputs) => {
+    const { data, error, status } = await supabase
+      .from("delivery_places")
+      .insert([{ name, kana, address, tel }])
+      .select();
+    if (error) {
+      console.log(error);
+    }
+    if (status === 409) {
+      alert("すでに登録されています。");
+    }
+  };
+
+  const updateeliveryPlace = async ({
+    id,
+    name,
+    kana,
+    address,
+    tel,
+  }: Inputs) => {
+    const { data, error, status } = await supabase
+      .from("delivery_places")
+      .update([{ name, kana, address, tel }])
+      .eq("id", id)
+      .select();
+    if (error) {
+      console.log(error);
+    }
+    if (status === 409) {
+      alert("すでに登録されています。");
+    }
+  };
 
   const onClose = () => {
     const modal = document.getElementById("modal");
@@ -72,12 +122,16 @@ export const SettingsDeliveryForm: FC<Props> = ({
         <TextInput
           className="mt-4"
           type="text"
+          label="フリガナ"
+          register={{ ...register("kana") }}
+        />
+
+        <TextInput
+          className="mt-4"
+          type="text"
           label="住所"
           register={{ ...register("address") }}
         />
-        {errors.address && (
-          <div className="ml-2 text-red-500">住所を入力してください</div>
-        )}
 
         <TextInput
           className="mt-4"
@@ -85,9 +139,6 @@ export const SettingsDeliveryForm: FC<Props> = ({
           label="TEL"
           register={{ ...register("tel") }}
         />
-        {errors.tel && (
-          <div className="ml-2 text-red-500">TELを入力してください</div>
-        )}
         <div className="flex justify-center gap-4">
           {pageType === "new" ? (
             <Link href="/settings/delivery-places">
@@ -102,6 +153,7 @@ export const SettingsDeliveryForm: FC<Props> = ({
           ) : (
             <>
               <Button
+                type="button"
                 size="sm"
                 color="text-black"
                 onClick={onClose}

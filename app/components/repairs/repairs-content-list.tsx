@@ -11,14 +11,16 @@ type Props = {
   setValue: UseFormSetValue<Repair>;
   isModal: boolean;
   setIsModal: (payload: boolean) => void;
+  rowIdx: number;
 };
 
 type Factory = Database["public"]["Tables"]["factories"]["Row"];
 
-export const RepairFactoryList: FC<Props> = ({
+export const RepairContentList: FC<Props> = ({
   setValue,
   isModal,
   setIsModal,
+  rowIdx,
 }) => {
   const [search, setSearch] = useState("");
   const [factories, setFactories] = useState<Factory[] | null>([]);
@@ -39,6 +41,71 @@ export const RepairFactoryList: FC<Props> = ({
     );
     setFilterFactories(newArray || null);
   }, [factories, search]);
+
+  console.log("1");
+
+  const templates = [
+    {
+      id: 0,
+      factory: {
+        id: 1,
+        name: "徳島工場",
+      },
+      delivery: {
+        id: 1,
+        name: "配送センター",
+      },
+      customer: "マ・マーマカロニ宇都宮工場",
+      title: "襟テーピースナッパー付け",
+      price: 180,
+      image: [{ path: "/images/20230731.png" }],
+    },
+    {
+      id: 1,
+      factory: {
+        id: 1,
+        name: "徳島工場",
+      },
+      delivery: {
+        id: 1,
+        name: "配送センター",
+      },
+      customer: "共同リネンサプライ",
+      title: "裾上げ",
+      price: 320,
+      image: [{ path: "/images/20230731.png" }],
+    },
+    {
+      id: 2,
+      factory: {
+        id: 1,
+        name: "大野制帽所",
+      },
+      delivery: {
+        id: 1,
+        name: "配送センター",
+      },
+      customer: "阪急デリカアイ",
+      title: "線付け",
+      price: 150,
+      image: [{ path: "/images/20230731.png" }],
+    },
+    {
+      id: 3,
+      factory: {
+        id: 1,
+        name: "徳島工場",
+      },
+      delivery: {
+        id: 1,
+        name: "配送センター",
+      },
+      customer: "共同リネンサプライ",
+      title: "裾上げ",
+      price: 320,
+      image: [{ path: "/images/20230731.png" }],
+    },
+  ];
 
   return (
     <>
@@ -65,16 +132,19 @@ export const RepairFactoryList: FC<Props> = ({
             </tr>
           </thead>
           <tbody>
-            {filterFactories?.map(({ id, name }) => (
+            {templates?.map(({ id, title, image }) => (
               <tr key={id} className="text-md border-b border-slate-200">
-                <td className="px-6 py-3">{name}</td>
+                <td className="px-6 py-3">{title}</td>
                 <td className="px-6 py-3">
                   <Button
                     type="button"
                     bg="bg-black"
                     size="sm"
                     onClick={() => {
-                      setValue("factory", name);
+                      setValue(`repair_contents.${rowIdx}`, {
+                        title,
+                        image: image[0].path,
+                      });
                       setIsModal(false);
                     }}
                   >

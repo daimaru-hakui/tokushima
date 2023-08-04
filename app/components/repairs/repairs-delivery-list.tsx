@@ -1,13 +1,11 @@
+"use client";
 import React, { FC, useEffect, useState } from "react";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { UseFormSetValue } from "react-hook-form";
 import { Repair } from "@/types";
-
-type Factory = {
-  id: number;
-  name: string;
-};
+import { Database } from "@/lib/database.types";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type Props = {
   setValue: UseFormSetValue<Repair>;
@@ -15,18 +13,34 @@ type Props = {
   setIsModal: (payload: boolean) => void;
 };
 
+type DeliveryPlace = Database["public"]["Tables"]["delivery_places"]["Row"];
+
 export const RepairsDeliveryList: FC<Props> = ({ setValue, setIsModal }) => {
   const [search, setSearch] = useState("");
-  const [filteritems, setFilterItems] = useState<Factory[]>([]);
-  const list = [
-    { id: 1, name: "配送センター" },
-    { id: 2, name: "徳島工場" },
-  ];
+  const [deliveryPlaces, setDeliveryPlaces] = useState<DeliveryPlace[] | null>(
+    []
+  );
+  const [filterDeliveryPlaces, setFilterDeliveryPlaces] = useState<
+    DeliveryPlace[] | null
+  >([]);
+  const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
-    const newArray = list.filter((value) => value.name.includes(search));
-    setFilterItems(newArray);
-  }, [search]);
+    const getDeliveryPlace = async () => {
+      const { data, error } = await supabase
+        .from("delivery_places")
+        .select("*");
+      setDeliveryPlaces(data);
+    };
+    getDeliveryPlace();
+  }, []);
+
+  useEffect(() => {
+    const newArray = deliveryPlaces?.filter((deliveryPlace) =>
+      deliveryPlace.name.includes(search)
+    );
+    setFilterDeliveryPlaces(newArray || null);
+  }, [deliveryPlaces, search]);
 
   return (
     <>
@@ -45,20 +59,16 @@ export const RepairsDeliveryList: FC<Props> = ({ setValue, setIsModal }) => {
           <thead>
             <tr className="text-xs border-b border-slate-200">
               <th scope="col" className="px-6 py-3 text-left">
-                ID
-              </th>
-              <th scope="col" className="px-6 py-3 text-left">
                 納品先
               </th>
-              <th scope="col" className="px-6 py-3 text-left">
+              <th scope="col" className="px-6 py-3 text-left w-[100px]">
                 選択
               </th>
             </tr>
           </thead>
           <tbody>
-            {filteritems.map(({ id, name }) => (
+            {filterDeliveryPlaces?.map(({ id, name }) => (
               <tr key={id} className="text-md border-b border-slate-200">
-                <td className="px-6 py-3">{id}</td>
                 <td className="px-6 py-3">{name}</td>
                 <td className="px-6 py-3">
                   <Button

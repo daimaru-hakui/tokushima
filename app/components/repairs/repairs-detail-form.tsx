@@ -18,6 +18,10 @@ type Inputs = {
   deadline: string;
   customer: string;
   status: string;
+  repair_contents: {
+    title: string;
+    image: string;
+  }[];
   repair_details: {
     maker: string;
     productName: string;

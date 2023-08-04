@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 type Inputs = {
   id: string;
   name: string;
+  kana: string;
   address: string;
   tel: string;
 };
@@ -28,30 +29,6 @@ export const SettingsFactoryForm: FC<Props> = ({
   const router = useRouter();
   const [isActive, setIsActive] = useState(false);
   const supabase = createClientComponentClient();
-
-  const addFactory = async ({ name, address, tel }: Inputs) => {
-    const { data, error } = await supabase
-      .from("factories")
-      .insert([{ name, address, tel }])
-      .select();
-    if (error) {
-      console.log(error);
-    }
-  };
-
-  const updateFactory = async ({ id, name, address, tel }: Inputs) => {
-    const { data, error, status } = await supabase
-      .from("factories")
-      .update([{ name, address, tel }])
-      .eq("id", id)
-      .select();
-    if (error) {
-      console.log(error);
-    }
-    if (status === 409) {
-      alert("すでに登録されています。");
-    }
-  };
 
   const {
     register,
@@ -74,6 +51,30 @@ export const SettingsFactoryForm: FC<Props> = ({
       await updateFactory(data);
       onClose();
       router.refresh();
+    }
+  };
+
+  const addFactory = async ({ name, kana, address, tel }: Inputs) => {
+    const { data, error } = await supabase
+      .from("factories")
+      .insert([{ name, kana, address, tel }])
+      .select();
+    if (error) {
+      console.log(error);
+    }
+  };
+
+  const updateFactory = async ({ id, name, kana, address, tel }: Inputs) => {
+    const { data, error, status } = await supabase
+      .from("factories")
+      .update([{ name, kana, address, tel }])
+      .eq("id", id)
+      .select();
+    if (error) {
+      console.log(error);
+    }
+    if (status === 409) {
+      alert("すでに登録されています。");
     }
   };
 
@@ -109,7 +110,12 @@ export const SettingsFactoryForm: FC<Props> = ({
         {errors.name && (
           <div className="ml-2 text-red-500">工場名を入力してください</div>
         )}
-
+        <TextInput
+          className="mt-4"
+          type="text"
+          label="フリガナ"
+          register={{ ...register("kana") }}
+        />
         <TextInput
           className="mt-4"
           type="text"
@@ -147,7 +153,7 @@ export const SettingsFactoryForm: FC<Props> = ({
                 onClick={onClose}
                 className="mt-10 border border-black"
               >
-               閉じる
+                閉じる
               </Button>
             </>
           )}

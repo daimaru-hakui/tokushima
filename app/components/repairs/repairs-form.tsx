@@ -1,5 +1,4 @@
 "use client";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../utils/button";
@@ -9,6 +8,7 @@ import { RepairsDetailForm } from "./repairs-detail-form";
 import { Repair } from "@/types";
 import { RepairsFactoryModal } from "./repairs-factory-modal";
 import { RepairsDeliveryModal } from "./repairs-delivery-modal";
+import { RepairsContentForm } from "./repairs-content-form";
 
 type Inputs = {
   factory: string;
@@ -16,6 +16,10 @@ type Inputs = {
   deadline: string;
   customer: string;
   status: string;
+  repair_contents: {
+    title: string;
+    image: string;
+  }[];
   repair_details: {
     maker: string;
     productName: string;
@@ -26,7 +30,6 @@ type Inputs = {
 };
 
 export const RepairForm: FC = () => {
-  const supabase = createClientComponentClient();
   const {
     control,
     watch,
@@ -42,6 +45,7 @@ export const RepairForm: FC = () => {
       deadline: "",
       customer: "",
       status: "PICKING",
+
       repair_details: [
         {
           maker: "",
@@ -49,6 +53,12 @@ export const RepairForm: FC = () => {
           size: "",
           quantity: 0,
           comment: "",
+        },
+      ],
+      repair_contents: [
+        {
+          title: "",
+          image: "",
         },
       ],
     },
@@ -149,9 +159,13 @@ export const RepairForm: FC = () => {
           </div>
         </div>
         <div className="mt-12">
-          <Button type="button" w="w-full" bg="bg-black">
-            テンプレート
-          </Button>
+          <RepairsContentForm
+            control={control}
+            register={register}
+            getValues={getValues}
+            watch={watch}
+            setValue={setValue}
+          />
         </div>
 
         <RepairsDetailForm

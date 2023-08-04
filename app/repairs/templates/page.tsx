@@ -70,7 +70,7 @@ const RepairTemplates = () => {
       <div className="py-2 mb-6 text-2xl border-b border-gray-200">
         テンプレート一覧
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-6 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 w-full">
         {templates.map((template) => (
           <RepairsTemplateCard key={template.id} template={template} />
         ))}

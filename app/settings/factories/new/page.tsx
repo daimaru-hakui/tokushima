@@ -8,6 +8,7 @@ const FactoryNew: NextPage = () => {
   const defaultValues = {
     id:"",
     name:"",
+    kana:"",
     address:"",
     tel:""
   }
