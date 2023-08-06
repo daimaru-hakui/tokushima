@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, use } from "react";
 import { Modal } from "../utils/modal/modal";
 import {
   Control,
@@ -13,6 +14,7 @@ import { Repair } from "@/types";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { PiPlusBold } from "react-icons/pi";
+import { FaTrashAlt } from "react-icons/fa";
 import { RepairContentList } from "./repairs-content-list";
 
 type Inputs = {
@@ -24,6 +26,7 @@ type Inputs = {
   repair_contents: {
     title: string;
     image: string;
+    price: number;
   }[];
   repair_details: {
     maker: string;
@@ -48,8 +51,8 @@ export const RepairsContentForm: FC<Props> = ({
   register,
   watch,
 }) => {
-  const [contents, setContents] = useState<any>([]);
   const [isModal, setIsModal] = useState(false);
+  const [length, setLength] = useState(0);
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: "repair_contents",
@@ -59,59 +62,81 @@ export const RepairsContentForm: FC<Props> = ({
     append({
       title: "",
       image: "",
+      price: 0
     });
   };
-  const onOpen = () => setIsModal(true);
-  console.log(contents);
 
+  const removeContent = (idx: number) => {
+    remove(idx);
+  };
+
+  const onOpen = () => setIsModal(true);
   useEffect(() => {
-    const array = watch("repair_contents");
-    setContents(array);
+    setLength(watch("repair_contents").length);
   }, [watch("repair_contents")]);
 
   return (
     <>
       {fields.map((field, idx) => (
-        <>
-          <div key={field.id} className="w-full p-6 flex gap-3">
-            <div className="w-96">
-              <Input
-                className="hidden"
-                register={{ ...register(`repair_contents.${idx}.image`) }}
-              />
-              {contents
-                ?.filter((_: any, index: number) => idx === index)
-                .map((content: any, index: number) => (
-                  <img
-                    key={index}
-                    src={content.image}
-                    className="border border-1 border-gray-200"
+        <React.Fragment key={field.id}>
+          {(watch("repair_contents")[idx].title) && (
+            <div className="w-full mt-6 p-6 flex items-center justify-between gap-3">
+              <div className="flex gap-3">
+                <div className="w-full">
+                  <Input
+                    className="hidden"
+                    register={{ ...register(`repair_contents.${idx}.image`) }}
                   />
-                ))}
-            </div>
-            <div>
-              <div className="p-1 w-full">
-                <Input
-                  className="hidden"
-                  register={{ ...register(`repair_contents.${idx}.title`) }}
+                  <img
+                    src={watch("repair_contents")[idx].image}
+                    className="border border-1 border-gray-100 shadow-sm"
+                  />
+                </div>
+                <div className="w-full">
+                  <div className="p-1 w-full">
+                    <Input
+                      className="hidden"
+                      register={{ ...register(`repair_contents.${idx}.title`, { required: true }) }}
+                    />
+                    {watch("repair_contents")[idx].title}
+                  </div>
+                  <div className="p-1 w-[100px] flex items-center gap-1">
+                    <Input
+                      className=""
+                      register={{ ...register(`repair_contents.${idx}.price`) }}
+                    />円
+                  </div>
+                </div>
+              </div>
+              <div>
+                <FaTrashAlt
+                  className="ml-2 cursor-pointer"
+                  onClick={() => removeContent(idx)}
                 />
-                {contents
-                  ?.filter((_: any, index: number) => idx === index)
-                  .map((content: any) => content.title)}
               </div>
             </div>
-          </div>
-            <div>
-              <Button
-                type="button"
-                bg="bg-black"
-                size="md"
-                className="w-full"
-                onClick={onOpen}
-              >
-                テンプレート
-              </Button>
-
+          )}
+          {!watch("repair_contents")[idx].title && (
+            <>
+              <div className="flex items-center mt-6">
+                <Button
+                  type="button"
+                  bg="bg-black"
+                  size="md"
+                  className="w-full"
+                  onClick={onOpen}
+                >
+                  テンプレート
+                </Button>
+                {idx !== 0 && (
+                  <div>
+                    <FaTrashAlt
+                      className="ml-2 cursor-pointer"
+                      onClick={() => removeContent(idx)}
+                    />
+                  </div>
+                )}
+              </div>
               <Modal
                 size="md"
                 title="検索"
@@ -125,15 +150,19 @@ export const RepairsContentForm: FC<Props> = ({
                   rowIdx={idx}
                 />
               </Modal>
-            </div>
-        </>
+            </>
+          )}
+        </React.Fragment>
       ))}
-      <div className="w-full mt-6 flex justify-center">
-        <Button type="button" size="sm" bg="bg-black" onClick={addContent}>
-          <PiPlusBold className="mr-1" />
-          追加
-        </Button>
-      </div>
+      {(watch("repair_contents")[length - 1]?.title ||
+        watch("repair_contents").length === 0) && (
+          <div className="w-full mt-6 flex justify-center">
+            <Button type="button" size="sm" bg="bg-black" onClick={addContent}>
+              <PiPlusBold className="mr-1" />
+              追加
+            </Button>
+          </div>
+        )}
     </>
   );
 };
