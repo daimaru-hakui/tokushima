@@ -10,25 +10,6 @@ import { RepairsFactoryModal } from "./repairs-factory-modal";
 import { RepairsDeliveryModal } from "./repairs-delivery-modal";
 import { RepairsContentForm } from "./repairs-content-form";
 
-type Inputs = {
-  factory: string;
-  delivery: string;
-  deadline: string;
-  customer: string;
-  status: string;
-  repair_contents: {
-    title: string;
-    image: string;
-  }[];
-  repair_details: {
-    maker: string;
-    productName: string;
-    size: string;
-    quantity: number;
-    comment: string;
-  }[];
-};
-
 export const RepairForm: FC = () => {
   const {
     control,
@@ -64,7 +45,7 @@ export const RepairForm: FC = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<Repair> = async (data) => {
     console.log(data);
   };
 

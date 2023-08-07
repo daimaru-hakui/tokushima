@@ -39,10 +39,10 @@ type Inputs = {
 
 type Props = {
   setValue: UseFormSetValue<Repair | any>;
-  control: Control<Inputs, any>;
-  register: UseFormRegister<Inputs>;
-  getValues: UseFormGetValues<Inputs>;
-  watch: UseFormWatch<Inputs>;
+  register: UseFormRegister<Repair>;
+  control: Control<Repair>;
+  getValues: UseFormGetValues<Repair>;
+  watch: UseFormWatch<Repair>;
 };
 
 export const RepairsContentForm: FC<Props> = ({

@@ -7,6 +7,7 @@ export type Repair = {
     repair_contents: {
       title: string;
       image: string;
+      price:number;
     }[];
     repair_details: {
       maker: string;
