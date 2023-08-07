@@ -132,7 +132,7 @@ export const RepairContentList: FC<Props> = ({
             </tr>
           </thead>
           <tbody>
-            {templates?.map(({ id, title, image }) => (
+            {templates?.map(({ id, title, image,price }) => (
               <tr key={id} className="text-md border-b border-slate-200">
                 <td className="px-6 py-3">{title}</td>
                 <td className="px-6 py-3">
@@ -144,6 +144,7 @@ export const RepairContentList: FC<Props> = ({
                       setValue(`repair_contents.${rowIdx}`, {
                         title,
                         image: image[0].path,
+                        price
                       });
                       setIsModal(false);
                     }}
