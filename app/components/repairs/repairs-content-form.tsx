@@ -75,12 +75,31 @@ export const RepairsContentForm: FC<Props> = ({
     setLength(watch("repair_contents").length);
   }, [watch("repair_contents")]);
 
+  const onClose = (idx:number) => {
+    const content = document.getElementById(`content-${idx}`);
+    if (content) {
+      let i = 1;
+      const fadeOut = () => {
+        setTimeout(() => {
+          content.style.transform = `scaleY(${i.toString()})`;
+          i = i - 0.02;
+          if (i < 0) {
+            removeContent(idx)
+            return;
+          }
+          fadeOut();
+        }, 1);
+      };
+      fadeOut();
+    }
+  };
+
   return (
     <>
       {fields.map((field, idx) => (
         <React.Fragment key={field.id}>
           {(watch("repair_contents")[idx].title) && (
-            <div className="w-full mt-6 p-6 flex items-center justify-between gap-3">
+            <div id={`content-${idx}`} style={{transformOrigin:"top"}} className="w-full mt-6 p-6 flex items-center justify-between gap-3">
               <div className="flex gap-3">
                 <div className="w-full">
                   <Input
@@ -111,7 +130,7 @@ export const RepairsContentForm: FC<Props> = ({
               <div>
                 <FaTrashAlt
                   className="ml-2 cursor-pointer"
-                  onClick={() => removeContent(idx)}
+                  onClick={() => onClose(idx)}
                 />
               </div>
             </div>
