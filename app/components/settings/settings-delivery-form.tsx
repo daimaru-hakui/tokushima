@@ -47,7 +47,7 @@ export const SettingsDeliveryForm: FC<Props> = ({
       router.push("/settings/delivery-places");
       router.refresh();
     } else {
-      await updateeliveryPlace(data);
+      await updatdeliveryPlace(data);
       onClose();
       router.refresh();
     }
@@ -66,7 +66,7 @@ export const SettingsDeliveryForm: FC<Props> = ({
     }
   };
 
-  const updateeliveryPlace = async ({
+  const updatdeliveryPlace = async ({
     id,
     name,
     kana,
