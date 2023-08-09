@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TextInput: FC<Props> = ({
-  type = "text",
+  type = "number",
   placeholder = "",
   label = "",
   register,

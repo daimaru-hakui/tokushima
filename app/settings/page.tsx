@@ -4,6 +4,7 @@ import {
   PiFactoryBold,
   PiBuildingsBold,
 } from "react-icons/pi";
+import { TbCategory } from "react-icons/tb";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -33,6 +34,11 @@ const SettingPage: NextPage = async () => {
       name: "顧客登録",
       link: "/settings/customers",
       image: <PiBuildingsBold />,
+    },
+    {
+      name: "カテゴリー登録",
+      link: "/settings/categories",
+      image: <TbCategory />,
     },
   ];
 

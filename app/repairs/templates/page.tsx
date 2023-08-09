@@ -13,6 +13,10 @@ const RepairTemplates = () => {
         id: 1,
         name: "配送センター",
       },
+      category:{
+        id:1,
+        name:"股下修理"
+      },
       customer: "マ・マーマカロニ宇都宮工場",
       title: "襟テーピースナッパー付け",
       price: 180,

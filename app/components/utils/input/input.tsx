@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 type Props = {
-  type?: "text" | "password" | "date";
+  type?: "text" | "password" | "date" |"number";
   value?: string;
   placeholder?: string;
   label?: string;

@@ -1,0 +1,53 @@
+.container {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.progressContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 350px;
+    position: relative;
+    z-index: 1;
+}
+
+.progressContainer::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 4px;
+    background-color: rgb(215, 210, 210);
+    z-index: 0;
+}
+
+.progress {
+    position: absolute;
+    content: "";
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 4px;
+    background-color: rgb(17, 17, 17);
+    z-index: 10;
+    transition: width .5s;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 3px solid rgb(215, 210, 210);
+    border-radius: 50%;
+    z-index: 100;
+    transition: all .5s;
+}
+
+.circle.active {
+    border: 3px solid black;
+}

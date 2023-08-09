@@ -86,7 +86,7 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
       <div className="py-2 mb-6 text-2xl border-b border-gray-200">詳細</div>
       <div className="flex gap-3 items-start flex-col md:flex-row">
         <div className="w-full flex flex-col gap-3">
-          {data.images[0]?.path && (
+          {/* {data.images[0]?.path && (
             <div className="">
               <img className="shadow-md border border-1 border-gray-100 w-full" src={data.images[0].path} />
             </div>
@@ -95,7 +95,7 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
             <div className="">
               <img className="shadow-md border border-1 border-gray-100 w-full" src={data.images[1].path} />
             </div>
-          )}
+          )} */}
         </div>
         <table className="table-auto w-full border border-1 border-gray-200">
           <tbody className="">
@@ -103,13 +103,13 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
               <th className="p-3 font-bold text-sm text-left w-[120px]">
                 工場名
               </th>
-              <td>{data.factory.name}</td>
+              <td>{data?.factory.name}</td>
             </tr>
             <tr>
               <th className="p-3 font-bold text-sm text-left w-[120px]">
                 納品先
               </th>
-              <td>{data.delivery.name}</td>
+              <td>{data?.delivery.name}</td>
             </tr>
             <tr>
               <th className="p-3 font-bold text-sm text-left w-[120px]">

@@ -9,6 +9,9 @@ import {
   PiFactoryBold,
   PiBuildingsBold,
 } from "react-icons/pi";
+import {
+  TbCategory,
+} from "react-icons/tb";
 
 export const SettingsSidebarList: FC = () => {
   const setIsDrawer = useDrawerStore((state) => state.setIsDrawer);
@@ -25,6 +28,11 @@ export const SettingsSidebarList: FC = () => {
       name: "顧客登録",
       link: "/settings/customers",
       image: <PiBuildingsBold />,
+    },
+    {
+      name: "カテゴリー登録",
+      link: "/settings/categories",
+      image: <TbCategory />,
     },
   ];
   return (

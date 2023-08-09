@@ -4,6 +4,7 @@ export type Repair = {
     deadline: string;
     customer: string;
     status: string;
+    category:string;
     repair_contents: {
       title: string;
       image: string;
@@ -16,4 +17,16 @@ export type Repair = {
       quantity: number;
       comment: string;
     }[];
+  };
+
+  export type RepairTemplate = {
+    factory: string;
+    category:string;
+    customer: string;
+    title:string;
+    price:number;
+    color:string;
+    position:string;
+    images:string[]
+    comment:string;
   };
