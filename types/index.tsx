@@ -1,5 +1,8 @@
 export type Repair = {
-    factory: string;
+    factory: {
+      id:string;
+      name:string;
+    }
     delivery: string;
     deadline: string;
     customer: string;
@@ -20,8 +23,14 @@ export type Repair = {
   };
 
   export type RepairTemplate = {
-    factory: string;
-    category:string;
+    factory: {
+      id:string;
+      name:string;
+    }
+    category: {
+      id:string;
+      name:string;
+    }
     customer: string;
     title:string;
     price:number;

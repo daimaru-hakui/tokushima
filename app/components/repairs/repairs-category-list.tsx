@@ -3,12 +3,12 @@ import React, { FC, useEffect, useState } from "react";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { UseFormSetValue } from "react-hook-form";
-import { Repair } from "@/types";
+import { Repair, RepairTemplate } from "@/types";
 import { Database } from "@/lib/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type Props = {
-  setValue: UseFormSetValue<Repair>;
+  setValue: UseFormSetValue<Repair | RepairTemplate>;
   isModal: boolean;
   setIsModal: (payload: boolean) => void;
 };
@@ -17,12 +17,10 @@ type Category = Database["public"]["Tables"]["repair_categories"]["Row"];
 
 export const RepairsCategoryList: FC<Props> = ({ setValue, setIsModal }) => {
   const [search, setSearch] = useState("");
-  const [categories, setCategories] = useState<Category[] | null>(
+  const [categories, setCategories] = useState<Category[] | null>([]);
+  const [filterCategories, setFilterCategories] = useState<Category[] | null>(
     []
   );
-  const [filterCategories, setFilterCategories] = useState<
-  Category[] | null
-  >([]);
   const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
@@ -30,17 +28,17 @@ export const RepairsCategoryList: FC<Props> = ({ setValue, setIsModal }) => {
       const { data, error } = await supabase
         .from("repair_categories")
         .select("*");
-        setCategories(data);
+      setCategories(data);
     };
     getDeliveryPlace();
   }, []);
 
   useEffect(() => {
     const newArray = categories?.filter((category) =>
-    category.name.includes(search)
+      category.name.includes(search)
     );
     setFilterCategories(newArray || null);
-  }, [categories,search]);
+  }, [categories, search]);
 
   return (
     <>
@@ -76,7 +74,11 @@ export const RepairsCategoryList: FC<Props> = ({ setValue, setIsModal }) => {
                     bg="bg-black"
                     size="sm"
                     onClick={() => {
-                      setValue("category", name);
+                      setValue(
+                        "category",
+                        { id, name },
+                        { shouldValidate: true }
+                      );
                       setIsModal(false);
                     }}
                   >

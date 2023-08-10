@@ -9,12 +9,12 @@ import { BiCloudUpload } from "react-icons/bi";
 import { RepairsCategoryModal } from "../repairs-category-modal";
 import { IoMdCloseCircle } from "react-icons/io";
 import Image from "next/image";
-import { Input } from "../../utils/input/input";
 import { NumberInput } from "../../utils/input/number-input";
 
 type Inputs = {};
 
 export const RepairsTemplateForm: FC = () => {
+  const [price, setPrice] = useState<number | "">("");
   const [fileUpload, setFileUpload] = useState<any>([]);
   const {
     register,
@@ -31,7 +31,7 @@ export const RepairsTemplateForm: FC = () => {
     const file = watch("images");
     if (file.length === 0) return;
     setFileUpload(file);
-  }, [watch, watch("images")]);
+  }, [watch("images")]);
 
   const deletefile = (idx: number) => {
     setFileUpload(
@@ -55,11 +55,14 @@ export const RepairsTemplateForm: FC = () => {
       <div className="flex gap-4 flex-col md:flex-row">
         <div className="flex-1">
           <div className="flex gap-2 items-end">
+            <input className="hidden" {...register("factory.id")} />
             <TextInput
               className="mt-4 flex-1"
               type="text"
               label="工場名"
-              register={{ ...register("factory", { required: true }) }}
+              disabled
+              required
+              register={{ ...register("factory.name", { required: true }) }}
             />
             <div>
               <RepairsFactoryModal setValue={setValue} />
@@ -71,18 +74,22 @@ export const RepairsTemplateForm: FC = () => {
         </div>
         <div className="flex-1">
           <div className="flex gap-2 items-end">
+            <input className="hidden" {...register("category.id")} />
             <TextInput
               className="mt-4 flex-1"
               type="text"
               label="カテゴリー"
-              register={{ ...register("category", { required: true }) }}
+              required
+              register={{ ...register("category.name", { required: true }) }}
             />
             <div>
               <RepairsCategoryModal setValue={setValue} />
             </div>
           </div>
-          {errors.delivery && (
-            <div className="ml-2 text-red-500">納品先を入力してください</div>
+          {errors.category && (
+            <div className="ml-2 text-red-500">
+              カテゴリー名を入力してください
+            </div>
           )}
         </div>
       </div>
@@ -92,6 +99,7 @@ export const RepairsTemplateForm: FC = () => {
             className="mt-4"
             type="text"
             label="顧客名"
+            required
             register={{ ...register("customer", { required: true }) }}
           />
           {errors.customer && (
@@ -106,6 +114,7 @@ export const RepairsTemplateForm: FC = () => {
             className="mt-4"
             type="text"
             label="修理名"
+            required
             register={{ ...register("title", { required: true }) }}
           />
           {errors.title && (
@@ -116,10 +125,14 @@ export const RepairsTemplateForm: FC = () => {
           <NumberInput
             className="mt-4"
             label="単価"
+            required
             register={{ ...register("price", { required: true }) }}
+            value={price}
+            setNumber={setPrice}
+            setValue={setValue}
           />
-          {errors.title && (
-            <div className="ml-2 text-red-500">修理名を入力してください</div>
+          {errors.price && (
+            <div className="ml-2 text-red-500">単価を入力してください</div>
           )}
         </div>
       </div>
@@ -144,36 +157,27 @@ export const RepairsTemplateForm: FC = () => {
 
       <div className="mt-6 mb-2 text-sm font-bold">画像をアップロード</div>
 
-      <div className="flex gap-6 text-slate-400">
-        <div className="flex justify-center w-full h-[250px] border-dashed border-2 border-slate-200 relative">
-          <label
-            htmlFor="image"
-            className="absolute top-0 left-0 z-0 w-full h-full flex items-center justify-center"
-          >
-            <div className="flex items-center justify-center flex-col">
-              <BiCloudUpload fontSize="80px" />
-              <p>ファイルをここにドラッグ＆ドロップしてください。</p>
-            </div>
-          </label>
-          {fileUpload.length === 0 ? (
+      {fileUpload.length === 0 && (
+        <div className="flex gap-6 text-slate-400">
+          <div className="flex justify-center w-full h-[250px] border-dashed border-2 border-slate-200 relative">
+            <label
+              htmlFor="image"
+              className="absolute top-0 left-0 z-0 w-full h-full flex items-center justify-center"
+            >
+              <div className="flex items-center justify-center flex-col">
+                <BiCloudUpload fontSize="80px" />
+                <p>ファイルをここにドラッグ＆ドロップしてください。</p>
+              </div>
+            </label>
             <input
               id="image"
               type="file"
               className="w-full opacity-0 z-1 cursor-pointer"
               {...register("images")}
-              multiple
             />
-          ) : (
-            <input
-              id="image"
-              type="file"
-              className="w-full opacity-0 z-1 cursor-pointer"
-              onChange={(e) => addImage(e)}
-              multiple
-            />
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="mt-3 w-full flex gap-3">
         {fileUpload.length > 0 &&

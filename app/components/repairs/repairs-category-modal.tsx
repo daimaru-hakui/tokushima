@@ -2,12 +2,12 @@
 import React, { FC, useState } from "react";
 import { Modal } from "../utils/modal/modal";
 import { UseFormSetValue } from "react-hook-form";
-import { Repair } from "@/types";
+import { Repair, RepairTemplate } from "@/types";
 import { Button } from "../utils/button";
 import { RepairsCategoryList } from "./repairs-category-list";
 
 type Props = {
-  setValue: UseFormSetValue<Repair | any>;
+  setValue: UseFormSetValue<Repair | RepairTemplate | any>;
 };
 
 export const RepairsCategoryModal: FC<Props> = ({ setValue }) => {

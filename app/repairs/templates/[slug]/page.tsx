@@ -1,4 +1,5 @@
 import React from "react";
+import {FaRegEdit} from "react-icons/fa"
 
 const TemplateById = ({ params }: { params: { slug: number } }) => {
   const templates = [
@@ -8,16 +9,16 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
         id: 1,
         name: "徳島工場",
       },
-      delivery: {
+      category: {
         id: 1,
-        name: "配送センター",
+        name: "股下修理",
       },
       customer: "マ・マーマカロニ宇都宮工場",
       status: "PICKING",
       title: "襟テーピースナッパー付け",
       price: 180,
-      color: "",
-      position: "",
+      color: "赤",
+      position: "左胸",
       images: [{ path: "/images/20230731.png" }],
       comment: "",
     },
@@ -27,9 +28,9 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
         id: 1,
         name: "徳島工場",
       },
-      delivery: {
+      category: {
         id: 1,
-        name: "配送センター",
+        name: "股下修理",
       },
       customer: "共同リネンサプライ",
       status: "PICKING",
@@ -46,9 +47,9 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
         id: 1,
         name: "大野制帽所",
       },
-      delivery: {
+      category: {
         id: 1,
-        name: "配送センター",
+        name: "股下修理",
       },
       customer: "阪急デリカアイ",
       status: "PICKING",
@@ -65,9 +66,9 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
         id: 1,
         name: "徳島工場",
       },
-      delivery: {
+      category: {
         id: 1,
-        name: "配送センター",
+        name: "股下修理",
       },
       customer: "共同リネンサプライ",
       status: "PICKING",
@@ -81,78 +82,85 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
   ];
   const data = templates[params?.slug];
 
+  const styles = {
+    container: "mt-6 flex flex-col md:flex-row gap-6 justify-between",
+    title: "font-bold text-xs",
+    value: "mt-2 ml-2 text-lg min-h-[30px]",
+  };
+
   return (
     <div className="mx-auto p-6 w-full max-w-[1100px] shadow-sm bg-white rounded-md">
-      <div className="py-2 mb-6 text-2xl border-b border-gray-200">詳細</div>
-      <div className="flex gap-3 items-start flex-col md:flex-row">
-        <div className="w-full flex flex-col gap-3">
-          {/* {data.images[0]?.path && (
-            <div className="">
-              <img className="shadow-md border border-1 border-gray-100 w-full" src={data.images[0].path} />
-            </div>
-          )}
-          {data.images[1]?.path && (
-            <div className="">
-              <img className="shadow-md border border-1 border-gray-100 w-full" src={data.images[1].path} />
-            </div>
-          )} */}
+      <div className="py-2 mb-6 text-2xl border-b border-gray-200 flex items-center justify-between">
+        <div>詳細</div>
+        <FaRegEdit cursor="pointer" />
+      </div>
+      <div className={styles.container}>
+        <div className="w-full ">
+          <div className={styles.title}>工場名</div>
+          <div className={styles.value}>{data?.factory.name}</div>
         </div>
-        <table className="table-auto w-full border border-1 border-gray-200">
-          <tbody className="">
-            <tr className="">
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                工場名
-              </th>
-              <td>{data?.factory.name}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                納品先
-              </th>
-              <td>{data?.delivery.name}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                入荷場所
-              </th>
-              <td>{data.status === "PICKING" ? "倉庫入れ" : "工場直送"}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                顧客名
-              </th>
-              <td>{data.customer}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                修理名
-              </th>
-              <td>{data.title}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                価格名
-              </th>
-              <td>{data.price}円</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">色</th>
-              <td>{data.color}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                位置
-              </th>
-              <td>{data.position}</td>
-            </tr>
-            <tr>
-              <th className="p-3 font-bold text-sm text-left w-[120px]">
-                コメント
-              </th>
-              <td>{data.comment}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="w-full ">
+          <div className={styles.title}>カテゴリー</div>
+          <div className={styles.value}>{data?.category.name}</div>
+        </div>
+      </div>
+      <div className={styles.container}>
+        <div className="w-full">
+          <div className={styles.title}>顧客名</div>
+          <div className={styles.value}>{data?.customer}</div>
+        </div>
+      </div>
+      <div className={styles.container}>
+        <div className="w-full">
+          <div className={styles.title}>修理名</div>
+          <div className={styles.value}>{data?.title}</div>
+        </div>
+        <div className="w-full">
+          <div className={styles.title}>単価</div>
+          <div className={styles.value}>{data?.price}円</div>
+        </div>
+      </div>
+      <div className={styles.container}>
+        <div className="w-full">
+          <div className={styles.title}>色</div>
+          <div className={styles.value}>{data?.color}</div>
+        </div>
+        <div className="w-full">
+          <div className={styles.title}>位置</div>
+          <div className={styles.value}>{data?.position}</div>
+        </div>
+      </div>
+      <div className={styles.container}>
+        <div className="w-full">
+          <div className={styles.title}>コメント</div>
+          <div className={styles.value}>{data?.comment}</div>
+        </div>
+      </div>
+      <div className="w-full mt-6">
+        <div className="w-full">
+          <div className={styles.title}>仕様書</div>
+        </div>
+        {data.images[0]?.path && (
+          <div className="mt-3">
+            <img
+              className="shadow-md border border-1 border-gray-100 w-full"
+              src={data.images[0].path}
+            />
+          </div>
+        )}
+      </div>
+      <div className="w-full mt-6">
+        <div className="w-full">
+          <div className={styles.title}>仕様書サブ</div>
+        </div>
+        {data.images[0]?.path && (
+          <div className="mt-3">
+            <img
+              className="shadow-md border border-1 border-gray-100 w-full"
+              src={data.images[0].path}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

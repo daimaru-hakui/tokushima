@@ -3,12 +3,12 @@ import React, { FC, useState, useEffect } from "react";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { UseFormSetValue } from "react-hook-form";
-import { Repair } from "@/types";
+import { Repair, RepairTemplate } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
 
 type Props = {
-  setValue: UseFormSetValue<Repair>;
+  setValue: UseFormSetValue<Repair | RepairTemplate>;
   isModal: boolean;
   setIsModal: (payload: boolean) => void;
 };
@@ -74,7 +74,11 @@ export const RepairFactoryList: FC<Props> = ({
                     bg="bg-black"
                     size="sm"
                     onClick={() => {
-                      setValue("factory", name);
+                      setValue(
+                        "factory",
+                        { id, name },
+                        { shouldValidate: true }
+                      );
                       setIsModal(false);
                     }}
                   >
