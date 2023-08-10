@@ -1,4 +1,4 @@
-import { RepairsTemplateCard } from "@/app/components/repairs/templates/repaires-template-card";
+import { RepairsTemplateCard } from "@/app/components/repairs/templates/repairs-template-card";
 import React from "react";
 
 const RepairTemplates = () => {

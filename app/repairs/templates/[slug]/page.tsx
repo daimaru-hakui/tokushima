@@ -1,3 +1,4 @@
+import { RepairsTemplateEdit } from "@/app/components/repairs/templates/repairs-template-edit";
 import React from "react";
 import {FaRegEdit} from "react-icons/fa"
 
@@ -92,7 +93,7 @@ const TemplateById = ({ params }: { params: { slug: number } }) => {
     <div className="mx-auto p-6 w-full max-w-[1100px] shadow-sm bg-white rounded-md">
       <div className="py-2 mb-6 text-2xl border-b border-gray-200 flex items-center justify-between">
         <div>詳細</div>
-        <FaRegEdit cursor="pointer" />
+        <RepairsTemplateEdit repairTemplate={templates[params?.slug]}/>
       </div>
       <div className={styles.container}>
         <div className="w-full ">

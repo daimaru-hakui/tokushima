@@ -13,7 +13,13 @@ import { NumberInput } from "../../utils/input/number-input";
 
 type Inputs = {};
 
-export const RepairsTemplateForm: FC = () => {
+type Props = {
+  pageType: "new" | "edit";
+  defaultValues: any;
+  setIsModal: (payload: boolean) => void;
+};
+
+export const RepairsTemplateForm: FC<Props> = () => {
   const [price, setPrice] = useState<number | "">("");
   const [fileUpload, setFileUpload] = useState<any>([]);
   const {
