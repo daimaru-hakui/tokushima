@@ -21,7 +21,10 @@ export const RepairForm: FC = () => {
     formState: { errors },
   } = useForm<Repair>({
     defaultValues: {
-      factory: "",
+      factory: {
+        id: "",
+        name: ""
+      },
       delivery: "",
       deadline: "",
       customer: "",
