@@ -75,7 +75,7 @@ export const RepairsContentForm: FC<Props> = ({
     setLength(watch("repair_contents").length);
   }, [watch("repair_contents")]);
 
-  const onClose = (idx:number) => {
+  const onClose = (idx: number) => {
     const content = document.getElementById(`content-${idx}`);
     if (content) {
       let i = 1;
@@ -84,7 +84,7 @@ export const RepairsContentForm: FC<Props> = ({
           content.style.transform = `scaleY(${i.toString()})`;
           i = i - 0.02;
           if (i < 0) {
-            removeContent(idx)
+            removeContent(idx);
             return;
           }
           fadeOut();
@@ -99,7 +99,7 @@ export const RepairsContentForm: FC<Props> = ({
       {fields.map((field, idx) => (
         <React.Fragment key={field.id}>
           {(watch("repair_contents")[idx].title) && (
-            <div id={`content-${idx}`} style={{transformOrigin:"top"}} className="w-full mt-6 p-6 flex items-center justify-between gap-3">
+            <div id={`content-${idx}`} style={{ transformOrigin: "top" }} className="w-full mt-6 p-6 flex items-center justify-between gap-3">
               <div className="flex gap-3">
                 <div className="w-full">
                   <Input
@@ -157,7 +157,7 @@ export const RepairsContentForm: FC<Props> = ({
                 )}
               </div>
               <Modal
-                size="md"
+                w="500px"
                 title="検索"
                 isModal={isModal}
                 setIsModal={setIsModal}

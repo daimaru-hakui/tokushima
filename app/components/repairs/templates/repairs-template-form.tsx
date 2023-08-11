@@ -16,10 +16,10 @@ type Inputs = {};
 type Props = {
   pageType: "new" | "edit";
   defaultValues: any;
-  setIsModal: (payload: boolean) => void;
+  setIsModal?: (payload: boolean) => void;
 };
 
-export const RepairsTemplateForm: FC<Props> = () => {
+export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
   const [price, setPrice] = useState<number | "">("");
   const [fileUpload, setFileUpload] = useState<any>([]);
   const {
@@ -28,7 +28,9 @@ export const RepairsTemplateForm: FC<Props> = () => {
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues
+  });
   const onSubmit = (data: Inputs) => {
     console.log(data);
   };
