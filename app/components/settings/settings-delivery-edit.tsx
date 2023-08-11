@@ -27,7 +27,7 @@ export const SettingsDeliveryEdit: FC<Props> = ({ deliveryPlace }) => {
       <Button type="button" bg="bg-black" size="sm" onClick={onOpen}>
         編集
       </Button>
-      <Modal size="sm" title="編集" isModal={isModal} setIsModal={setIsModal}>
+      <Modal title="編集" w="500px" isModal={isModal} setIsModal={setIsModal}>
         <div className="px-6">
           <SettingsDeliveryForm
             pageType="edit"

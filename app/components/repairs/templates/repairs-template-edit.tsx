@@ -13,7 +13,10 @@ type Props = {
 
 export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
   const [isModal, setIsModal] = useState(false);
-  const onOpen = () => setIsModal(true);
+  const onOpen = (e: any) => {
+    window.document.body.style.overflowY = "hidden";
+    setIsModal(true);
+  };
 
   const defaultValues = {
     id: repairTemplate?.id,
@@ -37,7 +40,7 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
   return (
     <>
       <FaRegEdit cursor="pointer" onClick={onOpen} />
-      <Modal size="sm" title="編集" isModal={isModal} setIsModal={setIsModal}>
+      <Modal title="編集" isModal={isModal} setIsModal={setIsModal} w="800px">
         <div className="px-6">
           <RepairsTemplateForm
             pageType="edit"

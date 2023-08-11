@@ -57,7 +57,7 @@ export const RepairsTemplateForm: FC<Props> = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", height: "100%" }}>
       <div className="flex gap-4 flex-col md:flex-row">
         <div className="flex-1">
           <div className="flex gap-2 items-end">
@@ -75,7 +75,7 @@ export const RepairsTemplateForm: FC<Props> = () => {
             </div>
           </div>
           {errors.factory && (
-            <div className="ml-2 text-red-500">工場名を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">工場名を入力してください</div>
           )}
         </div>
         <div className="flex-1">
@@ -93,7 +93,7 @@ export const RepairsTemplateForm: FC<Props> = () => {
             </div>
           </div>
           {errors.category && (
-            <div className="ml-2 text-red-500">
+            <div className="ml-2 text-red-500 text-sm">
               カテゴリー名を入力してください
             </div>
           )}
@@ -109,7 +109,7 @@ export const RepairsTemplateForm: FC<Props> = () => {
             register={{ ...register("customer", { required: true }) }}
           />
           {errors.customer && (
-            <div className="ml-2 text-red-500">顧客名を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">顧客名を入力してください</div>
           )}
         </div>
       </div>
@@ -124,7 +124,7 @@ export const RepairsTemplateForm: FC<Props> = () => {
             register={{ ...register("title", { required: true }) }}
           />
           {errors.title && (
-            <div className="ml-2 text-red-500">修理名を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">修理名を入力してください</div>
           )}
         </div>
         <div className="w-full md:w-72">
@@ -138,7 +138,7 @@ export const RepairsTemplateForm: FC<Props> = () => {
             setValue={setValue}
           />
           {errors.price && (
-            <div className="ml-2 text-red-500">単価を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">単価を入力してください</div>
           )}
         </div>
       </div>

@@ -31,7 +31,7 @@ export const NumberInput: FC<Props> = ({
 
   const handlePlus = () => {
     backColorChange("top");
-    setNumber((prev:any) => Number(prev) + 1);
+    setNumber((prev: any) => Number(prev) + 1);
     if (!setValue) return;
     setValue("price", Number(value) + 1, { shouldValidate: true });
   };
@@ -81,7 +81,8 @@ export const NumberInput: FC<Props> = ({
             ref={topArrow}
             className="w-full h-full flex justify-center items-center"
           >
-            <BiSolidUpArrow onClick={handlePlus} className="cursor-pointer" />
+            <BiSolidUpArrow onClick={handlePlus} className="cursor-pointer"
+              style={{ fontSize: "14px" }} />
           </div>
           <div className="h-[1px] w-full bg-gray-300"></div>
           <div
@@ -92,6 +93,7 @@ export const NumberInput: FC<Props> = ({
             <BiSolidDownArrow
               onClick={handleMinus}
               className="cursor-pointer"
+              style={{ fontSize: "14px" }}
             />
           </div>
         </div>
