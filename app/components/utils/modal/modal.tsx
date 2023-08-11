@@ -1,13 +1,12 @@
 "use client";
 import React, { FC } from "react";
 import styles from "./modal.module.css";
-import { Button } from "../button";
 import { MdClose } from "react-icons/md";
 
 type Props = {
   children: React.ReactNode;
   title: string;
-  size?: "xs" | "sm" | "md" | "lg";
+  w?: string;
   isModal: boolean;
   setIsModal: (payload: boolean) => void;
 };
@@ -15,13 +14,13 @@ type Props = {
 export const Modal: FC<Props> = ({
   children,
   title,
-  size = "md",
+  w = "auto",
   isModal,
   setIsModal,
 }) => {
 
   const onOpen = () => setIsModal(true);
-  const onClose = () => {
+  const onClose = (e: any) => {
     const modal = document.getElementById("modal");
     if (modal) {
       let i = 1;
@@ -31,6 +30,7 @@ export const Modal: FC<Props> = ({
           i = i - 0.02;
           if (i < 0) {
             setIsModal(false);
+            window.document.body.style.overflowY = "auto";
             return;
           }
           fadeOut();
@@ -43,21 +43,22 @@ export const Modal: FC<Props> = ({
   return (
     <>
       {isModal && (
-        <div id="modal">
-          <div
-            className={`modal ${styles.overlay} ${isModal && styles.isActive}`}
-            onClick={onClose}
-          ></div>
-          <div
-            className={`modal ${styles.content} ${isModal && styles.isActive}`}
-          >
-            <div className={`${styles.header}`}>
-              <div className={`${styles.title}`}>{title}</div>
-              <div>
-                <MdClose className="cursor-pointer" onClick={onClose} />
+        <div id="modal" className={`modal ${styles.modal} ${isModal && styles.isActive}`}>
+          <div className={`modal ${styles.overlay} ${isModal && styles.isActive}`}></div>
+          <div onClick={onClose} className={`${styles.container}`} >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{ width: w }}
+              className={`modal ${styles.content} ${isModal && styles.isActive}`}
+            >
+              <div className={`${styles.header}`}>
+                <div className={`${styles.title}`}>{title}</div>
+                <div>
+                  <MdClose className="cursor-pointer" onClick={onClose} />
+                </div>
               </div>
+              <div className={`${styles.body}`}>{children}</div>
             </div>
-            <div className={`${styles.body}`}>{children}</div>
           </div>
         </div>
       )}

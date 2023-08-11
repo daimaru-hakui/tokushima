@@ -7,7 +7,7 @@ import { Button } from "../utils/button";
 
 type Factory = Database["public"]["Tables"]["factories"]["Row"];
 
-export const SettingsFactoryEdit = ({ factory }: { factory: Factory }) => {
+export const SettingsFactoryEdit = ({ factory }: { factory: Factory; }) => {
   const [isModal, setIsModal] = useState(false);
   const onOpen = () => setIsModal(true);
 
@@ -23,7 +23,7 @@ export const SettingsFactoryEdit = ({ factory }: { factory: Factory }) => {
       <Button type="button" bg="bg-black" size="sm" onClick={onOpen}>
         編集
       </Button>
-      <Modal size="sm" title="編集" isModal={isModal} setIsModal={setIsModal}>
+      <Modal title="編集" w="500px" isModal={isModal} setIsModal={setIsModal}>
         <div className="px-6">
           <SettingsFactoryForm
             pageType="edit"

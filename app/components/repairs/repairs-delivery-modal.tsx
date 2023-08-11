@@ -18,7 +18,7 @@ export const RepairsDeliveryModal: FC<Props> = ({ setValue }) => {
       <Button type="button" bg="bg-black" size="md" onClick={onOpen}>
         検索
       </Button>
-      <Modal size="md" title="検索" isModal={isModal} setIsModal={setIsModal}>
+      <Modal w="500px" title="検索" isModal={isModal} setIsModal={setIsModal}>
         <RepairsDeliveryList
           setValue={setValue}
           isModal={isModal}
