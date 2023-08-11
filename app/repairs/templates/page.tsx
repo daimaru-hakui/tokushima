@@ -1,73 +1,17 @@
 import { RepairsTemplateCard } from "@/app/components/repairs/templates/repairs-template-card";
 import React from "react";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { NextPage } from "next";
+import { Database } from "@/lib/database.types";
 
-const RepairTemplates = () => {
-  const templates = [
-    {
-      id: 0,
-      factory: {
-        id: 1,
-        name: "徳島工場",
-      },
-      delivery: {
-        id: 1,
-        name: "配送センター",
-      },
-      category:{
-        id:1,
-        name:"股下修理"
-      },
-      customer: "マ・マーマカロニ宇都宮工場",
-      title: "襟テーピースナッパー付け",
-      price: 180,
-      images: [{ path: "/images/20230731.png" }],
-    },
-    {
-      id: 1,
-      factory: {
-        id: 1,
-        name: "徳島工場",
-      },
-      delivery: {
-        id: 1,
-        name: "配送センター",
-      },
-      customer: "共同リネンサプライ",
-      title: "裾上げ",
-      price: 320,
-      images: [{ path: "/images/20230731.png" }],
-    },
-    {
-      id: 2,
-      factory: {
-        id: 1,
-        name: "大野制帽所",
-      },
-      delivery: {
-        id: 1,
-        name: "配送センター",
-      },
-      customer: "阪急デリカアイ",
-      title: "線付け",
-      price: 150,
-      images: [{ path: "/images/20230731.png" }],
-    },
-    {
-      id: 3,
-      factory: {
-        id: 1,
-        name: "徳島工場",
-      },
-      delivery: {
-        id: 1,
-        name: "配送センター",
-      },
-      customer: "共同リネンサプライ",
-      title: "裾上げ",
-      price: 320,
-      images: [{ path: "/images/20230731.png" }],
-    },
-  ];
+const RepairTemplates: NextPage = async () => {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const { data: repair_templates, error } = await supabase.from("repair_templates").select(`
+  *,
+  factories(id,name),
+  repair_categories(id,name)
+`);
 
   return (
     <div className="mx-auto p-6 w-full max-w-[1100px] shadow-sm bg-white rounded-md">
@@ -75,8 +19,8 @@ const RepairTemplates = () => {
         テンプレート一覧
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 w-full">
-        {templates.map((template) => (
-          <RepairsTemplateCard key={template.id} template={template} />
+        {repair_templates?.map((template) => (
+          <RepairsTemplateCard key={template.id} repair_template={template} />
         ))}
       </div>
     </div>
