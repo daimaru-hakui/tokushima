@@ -52,6 +52,10 @@ export const RepairForm: FC = () => {
     console.log(data);
   };
 
+  // const addRepairTemplate = (data) => {
+
+  // };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
       <div className="flex flex-col">

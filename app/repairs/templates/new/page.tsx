@@ -11,8 +11,12 @@ const RepairTemplateNew = () => {
       id: "",
       name: ""
     },
+    title: "",
     customer: "",
     price: 0,
+    color: "",
+    position: "",
+    image_path: "",
     comment: "",
 
   };

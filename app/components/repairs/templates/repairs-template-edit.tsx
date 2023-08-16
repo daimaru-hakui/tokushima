@@ -5,7 +5,7 @@ import { Database } from "@/lib/database.types";
 import { RepairsTemplateForm } from "./repairs-template-form";
 import { FaRegEdit } from "react-icons/fa";
 
-type DeliveryPlace = Database["public"]["Tables"]["delivery_places"]["Row"];
+type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Update"];
 
 type Props = {
   repairTemplate: any;
@@ -33,7 +33,7 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
     price: repairTemplate.price,
     color: repairTemplate.color,
     position: repairTemplate.position,
-    images: [{ path: "/images/20230731.png" }],
+    image_path: repairTemplate.image_path,
     comment: repairTemplate.comment,
   };
 
