@@ -16,12 +16,12 @@ import { RepairsTemplatePreview } from "./repairs-template-preview";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-// type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
 
 type Props = {
   pageType: "new" | "edit";
   defaultValues: RepairTemplate;
   setIsModal?: (payload: boolean) => void;
+
 };
 
 export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
@@ -40,19 +40,19 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
   });
   const onSubmit = async (data: RepairTemplate) => {
     console.log(data);
-    const images = await addRepairImages(data);
+    const images = await addRepairImages(fileUpload);
     await addRepairTemplate(data, images);
     // router.push("/repairs/templates");
     // router.refresh();
   };
 
-  const addRepairImages = async (data: RepairTemplate) => {
-    if (data?.images?.length === 0) return;
-    const fileArray = data.images.map(async (image: any) => {
+  const addRepairImages = async (fileUpload: any) => {
+    if (fileUpload?.length === 0) return;
+    const fileArray = fileUpload.map(async (image: any) => {
       const uuid = uuidv4();
       const { data: inputData, error: inputError } = await supabase.storage
         .from("repairs")
-        .upload(uuid, image, {
+        .upload(uuid + '.png', image, {
           cacheControl: "3600",
           upsert: false,
         });
@@ -65,8 +65,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
       if (error) return;
       console.log(data.signedUrl);
       console.log(inputData.path);
-      return data?.signedUrl;
-      // return { path: inputData.path, url: data?.signedUrl };
+      return { path: inputData.path, url: data?.signedUrl };
     });
     return await pathArray(fileArray);
   };
@@ -100,32 +99,25 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
     console.log(error);
   };
 
-  // React.useEffect(() => {
-  //   const subscription = watch((value, { name, type }) =>
-  //     // setFileUpload((prev:any) => [...prev,value.images])
-  //     setFileUpload(value?.images)
-  //   );
-  //   return () => subscription.unsubscribe();
-  // }, [watch("images")]);
-
-  const deleteFile = (idx: number) => {
+  const deletePreviewFile = (idx: number) => {
     setFileUpload(
-      fileUpload.filter((_:any, index: number) => index !== idx)
+      fileUpload.filter((_: any, index: number) => index !== idx)
     );
-    setValue(
-      "images",
-      fileUpload.filter((_:any, index: number) => index !== idx)
-    );
+  };
+
+  const deleteImageFile = async (idx: number) => {
+    const images = watch("images").filter((image, index) => (index !== idx));
+    const { data, error } = await supabase.from("repair_templates").update({ images }).match({ id: defaultValues.id });
+    console.log(images);
   };
 
   const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const files: FileList | any = e.target.files;
     setFileUpload((prev: any) => [...prev, files[0]]);
-    // setValue("images",[...watch("images"),files[0]]);
   };
-  console.log("watch",watch("images"))
-  console.log("up",fileUpload)
+
+  console.log(fileUpload);
 
   return (
     <form
@@ -243,6 +235,22 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
         </div>
       </div>
 
+      {pageType === "edit" && (
+        <>
+          <div className="mt-6 text-sm font-bold">仕様書</div>
+          <div className="mt-3 w-full flex gap-3">
+            {watch("images") && watch("images")?.map((image: any, idx: number) => (
+              <RepairsTemplatePreview
+                key={idx}
+                file={image}
+                pathType="url"
+                deleteFile={deleteImageFile.bind(null, idx)}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
       <div className="mt-6 mb-2 text-sm font-bold">画像をアップロード</div>
       {fileUpload?.length < 3 && (
         <div className="flex gap-6 text-slate-400">
@@ -260,7 +268,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
               id="image"
               type="file"
               className="w-full opacity-0 z-1 cursor-pointer"
-              {...register("images")}
+              // {...register("images")}
               onChange={addImage}
             />
           </div>
@@ -269,26 +277,18 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
 
       {pageType === "new" && (
         <div className="mt-3 w-full flex gap-3">
-          {/* {fileUpload?.length >= 1 &&
+          {fileUpload?.length >= 1 &&
             fileUpload?.map((file: any, idx: number) => (
               <RepairsTemplatePreview
                 key={idx}
                 file={file}
-                deleteFile={deleteFile.bind(null, idx)}
+                deleteFile={deletePreviewFile.bind(null, idx)}
               />
-            ))} */}
+            ))}
         </div>
       )}
 
-      <div className="mt-3 w-full flex gap-3">
-        {/* {fileUpload?.map((image:any,idx:number) => (
-          <RepairsTemplatePreview
-            key={idx}
-            file={image}
-            deleteFile={deleteFile.bind(null, idx)}
-          />
-        ))} */}
-      </div>
+
 
       <div className="mt-6">
         <div className=" mb-2 font-bold text-sm">備考</div>

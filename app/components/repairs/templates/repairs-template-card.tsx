@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
-console.log(repair_template)
+  console.log(repair_template);
   return (
     <div className="border border-1 border-slate-200 rounded-md shadow-md overflow-hidden">
       <div className="py-1 flex justify-center text-sm font-bold bg-gray-100">
@@ -31,7 +31,7 @@ console.log(repair_template)
       <div className="p-3 pt-1">
         <div className="text-lg font-bold">{repair_template.title}</div>
         <div className="mt-1 text-sm">{repair_template.customer}</div>
-        <div className="mt-2 flex justify-between items-center">
+        <div className="mt-2 pt-3 flex justify-between items-center border-t border-slate-200">
           <div className="text-3xl font-bold">￥{repair_template.price}</div>
           <Link href={`/repairs/templates/${repair_template.id}`}>
             <Button bg="bg-black" size="sm">
