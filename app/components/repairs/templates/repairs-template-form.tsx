@@ -7,13 +7,14 @@ import { RepairsFactoryModal } from "../repairs-factory-modal";
 import { Button } from "../../utils/button";
 import { BiCloudUpload } from "react-icons/bi";
 import { RepairsCategoryModal } from "../repairs-category-modal";
-import { IoMdCloseCircle } from "react-icons/io";
-import Image from "next/image";
 import { NumberInput } from "../../utils/input/number-input";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { v4 as uuidv4 } from 'uuid';
-import { Database } from "@/lib/database.types";
+import { v4 as uuidv4 } from "uuid";
 import { RepairTemplate } from "@/types";
+import { IoMdCloseCircle } from "react-icons/io";
+import { RepairsTemplatePreview } from "./repairs-template-preview";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
 
@@ -23,10 +24,11 @@ type Props = {
   setIsModal?: (payload: boolean) => void;
 };
 
-export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
+export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
   const supabase = createClientComponentClient();
+  const router = useRouter();
   const [price, setPrice] = useState<number | "">("");
-  const [fileUpload, setFileUpload] = useState<any>("");
+  const [fileUpload, setFileUpload] = useState<any>(defaultValues.images);
   const {
     register,
     setValue,
@@ -34,72 +36,102 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues
+    defaultValues,
   });
   const onSubmit = async (data: RepairTemplate) => {
     console.log(data);
-    const imagePath = await addRepairImage(data);
-    console.log(imagePath);
-    await addRepairTemplate(data, imagePath);
+    const images = await addRepairImages(data);
+    await addRepairTemplate(data, images);
+    // router.push("/repairs/templates");
+    // router.refresh();
   };
 
-  const addRepairImage = async (data: RepairTemplate) => {
-    if (!data?.image_path) return;
-    const uuid = uuidv4();
-    const { data: inputData, error } = await supabase.storage
-      .from("repairs")
-      .upload(uuid, data.image_path[0], { cacheControl: "3600", upsert: false });
-    return inputData?.path;
+  const addRepairImages = async (data: RepairTemplate) => {
+    if (data?.images?.length === 0) return;
+    const fileArray = data.images.map(async (image: any) => {
+      const uuid = uuidv4();
+      const { data: inputData, error: inputError } = await supabase.storage
+        .from("repairs")
+        .upload(uuid, image, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (inputError) return;
+
+      const { data, error } = await supabase.storage
+        .from("repairs")
+        .createSignedUrl(inputData.path, 600);
+
+      if (error) return;
+      console.log(data.signedUrl);
+      console.log(inputData.path);
+      return data?.signedUrl;
+      // return { path: inputData.path, url: data?.signedUrl };
+    });
+    return await pathArray(fileArray);
   };
 
-  const addRepairTemplate = async (repair: RepairTemplate, imagePath: string = "") => {
-    const { data, error } = await supabase
-      .from("repair_templates")
-      .insert([
-        {
-          factory_id: repair.factory.id,
-          category_id: repair.category.id,
-          customer: repair.customer,
-          title: repair.title,
-          price: Number(repair.price),
-          color: repair.color,
-          position: repair.position,
-          image_path: imagePath,
-          comment: repair.comment
-        }]);
+  const pathArray = async (fileArray: any) => {
+    let imageArray = [];
+    for (const file of fileArray) {
+      imageArray.push(await file);
+    }
+    console.log(imageArray);
+    return imageArray;
+  };
+
+  const addRepairTemplate = async (
+    repair: RepairTemplate,
+    imagePath: string[] = []
+  ) => {
+    const { data, error } = await supabase.from("repair_templates").insert([
+      {
+        factory_id: repair.factory.id,
+        category_id: repair.category.id,
+        customer: repair.customer,
+        title: repair.title,
+        price: Number(repair.price),
+        color: repair.color,
+        position: repair.position,
+        images: [...imagePath],
+        comment: repair.comment,
+      },
+    ]);
     console.log(error);
   };
 
-  useEffect(() => {
-    const file = watch("image_path");
-    if (file?.length === 0) return;
-    setFileUpload(file);
-  }, [watch("image_path")]);
+  // React.useEffect(() => {
+  //   const subscription = watch((value, { name, type }) =>
+  //     // setFileUpload((prev:any) => [...prev,value.images])
+  //     setFileUpload(value?.images)
+  //   );
+  //   return () => subscription.unsubscribe();
+  // }, [watch("images")]);
 
-  const deletefile = () => {
-    setFileUpload("");
-    setValue("image_path", "");
+  const deleteFile = (idx: number) => {
+    setFileUpload(
+      fileUpload.filter((_:any, index: number) => index !== idx)
+    );
+    setValue(
+      "images",
+      fileUpload.filter((_:any, index: number) => index !== idx)
+    );
   };
 
-  // const deletefile = (idx: number) => {
-  //   setFileUpload(
-  //     Array.from(fileUpload).filter((_, index: number) => index !== idx)
-  //   );
-  //   setValue(
-  //     "image_path",
-  //     Array.from(fileUpload).filter((_, index: number) => index !== idx)
-  //   );
-  // };
-
-  // const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   const files: FileList | any = e.target.files;
-  //   setFileUpload((prev: any) => [...prev, ...files]);
-  //   setValue("image_path", [...fileUpload, ...files]);
-  // };
+  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const files: FileList | any = e.target.files;
+    setFileUpload((prev: any) => [...prev, files[0]]);
+    // setValue("images",[...watch("images"),files[0]]);
+  };
+  console.log("watch",watch("images"))
+  console.log("up",fileUpload)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", height: "100%" }}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{ width: "100%", height: "100%" }}
+    >
       <div className="flex gap-4 flex-col md:flex-row">
         <div className="flex-1">
           <div className="flex gap-2 items-end">
@@ -117,7 +149,9 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
             </div>
           </div>
           {errors.factory && (
-            <div className="ml-2 text-red-500 text-sm">工場名を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">
+              工場名を入力してください
+            </div>
           )}
         </div>
         <div className="flex-1">
@@ -151,7 +185,9 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
             register={{ ...register("customer", { required: true }) }}
           />
           {errors.customer && (
-            <div className="ml-2 text-red-500 text-sm">顧客名を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">
+              顧客名を入力してください
+            </div>
           )}
         </div>
       </div>
@@ -166,7 +202,9 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
             register={{ ...register("title", { required: true }) }}
           />
           {errors.title && (
-            <div className="ml-2 text-red-500 text-sm">修理名を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">
+              修理名を入力してください
+            </div>
           )}
         </div>
         <div className="w-full md:w-72">
@@ -180,7 +218,9 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
             setValue={setValue}
           />
           {errors.price && (
-            <div className="ml-2 text-red-500 text-sm">単価を入力してください</div>
+            <div className="ml-2 text-red-500 text-sm">
+              単価を入力してください
+            </div>
           )}
         </div>
       </div>
@@ -204,8 +244,7 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
       </div>
 
       <div className="mt-6 mb-2 text-sm font-bold">画像をアップロード</div>
-
-      {fileUpload?.length === 0 && (
+      {fileUpload?.length < 3 && (
         <div className="flex gap-6 text-slate-400">
           <div className="flex justify-center w-full h-[250px] border-dashed border-2 border-slate-200 relative">
             <label
@@ -221,41 +260,42 @@ export const RepairsTemplateForm: FC<Props> = ({ defaultValues }) => {
               id="image"
               type="file"
               className="w-full opacity-0 z-1 cursor-pointer"
-              {...register("image_path")}
+              {...register("images")}
+              onChange={addImage}
             />
           </div>
         </div>
       )}
 
-      <div className="mt-3 w-full flex gap-3">
-        {fileUpload?.length > 0 && (
-
-
-          <div key={fileUpload[0]} className="w-full relative">
-            <Image
-              alt=""
-              width="100"
-              height="100"
-              src={URL.createObjectURL(fileUpload[0])}
-              style={{ width: "100%", height: "auto", objectFit: "cover" }}
-              className="p-3 border border-1 border-gray-200"
-            />
-            <div className="absolute top-0 right-0 w-[30px] h-[30px] rounded-full bg-white z-1"></div>
-            <div className="absolute top-0 right-0">
-              <IoMdCloseCircle
-                fontSize="36px"
-                className="cursor-pointer"
-                onClick={deletefile}
+      {pageType === "new" && (
+        <div className="mt-3 w-full flex gap-3">
+          {/* {fileUpload?.length >= 1 &&
+            fileUpload?.map((file: any, idx: number) => (
+              <RepairsTemplatePreview
+                key={idx}
+                file={file}
+                deleteFile={deleteFile.bind(null, idx)}
               />
-            </div>
-          </div>
-        )
-        }
+            ))} */}
+        </div>
+      )}
+
+      <div className="mt-3 w-full flex gap-3">
+        {/* {fileUpload?.map((image:any,idx:number) => (
+          <RepairsTemplatePreview
+            key={idx}
+            file={image}
+            deleteFile={deleteFile.bind(null, idx)}
+          />
+        ))} */}
       </div>
 
       <div className="mt-6">
         <div className=" mb-2 font-bold text-sm">備考</div>
-        <textarea className="h-36 leading-6 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" {...register("comment")}></textarea>
+        <textarea
+          className="h-36 leading-6 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+          {...register("comment")}
+        ></textarea>
       </div>
       <div className="mt-6 flex justify-center">
         <Button type="submit" bg="bg-black">

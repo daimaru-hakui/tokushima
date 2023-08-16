@@ -4,14 +4,16 @@ import React from "react";
 import { cookies } from "next/headers";
 import { FaRegEdit } from "react-icons/fa";
 import { Database } from "@/lib/database.types";
+import Image from "next/image";
 
-const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
+const TemplateById = async ({ params }: { params: { slug: string } }) => {
   const supabase = createServerComponentClient<Database>({ cookies });
   const URL = process.env.url + "/storage/v1/object/public/repairs/";
   const { data: repair_template, error } = await supabase
     .from("repair_templates")
     .select(`*,repair_categories(id,name),factories(id,name)`)
-    .eq("id", params.slug).single();
+    .eq("id", params.slug)
+    .single();
 
   const styles = {
     container: "mt-6 flex flex-col md:flex-row gap-6 justify-between",
@@ -30,11 +32,16 @@ const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
       <div className={styles.container}>
         <div className="w-full ">
           <div className={styles.title}>工場名</div>
-          <div className={styles.value}>{repair_template?.factories && repair_template?.factories.name}</div>
+          <div className={styles.value}>
+            {repair_template?.factories && repair_template?.factories.name}
+          </div>
         </div>
         <div className="w-full ">
           <div className={styles.title}>カテゴリー</div>
-          <div className={styles.value}>{repair_template?.repair_categories && repair_template?.repair_categories.name}</div>
+          <div className={styles.value}>
+            {repair_template?.repair_categories &&
+              repair_template?.repair_categories.name}
+          </div>
         </div>
       </div>
       <div className={styles.container}>
@@ -73,28 +80,21 @@ const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
         <div className="w-full">
           <div className={styles.title}>仕様書</div>
         </div>
-        {repair_template?.image_path && (
-          <div className="mt-3">
-            <img
-              className="shadow-md border border-1 border-gray-100 w-full"
-              src={URL + repair_template?.image_path}
-            />
-          </div>
-        )}
-      </div>
-      {/* <div className="w-full mt-6">
-        <div className="w-full">
-          <div className={styles.title}>仕様書サブ</div>
+        <div className="mt-3 w-full flex gap-3">
+          {repair_template?.images &&
+            repair_template?.images.map((image) => (
+              <div key={image} className="mt-3 w-full">
+                <Image
+                  width={100}
+                  height={100}
+                  alt=""
+                  className="shadow-md border border-1 border-gray-100 w-full"
+                  src={image}
+                />
+              </div>
+            ))}
         </div>
-        {repair_template?.image_path && (
-          <div className="mt-3">
-            <img
-              className="shadow-md border border-1 border-gray-100 w-full"
-              src={repair_template?.image_path}
-            />
-          </div>
-        )}
-      </div> */}
+      </div>
     </div>
   );
 };

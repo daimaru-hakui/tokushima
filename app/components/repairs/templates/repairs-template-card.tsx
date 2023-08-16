@@ -1,28 +1,31 @@
 import React, { FC } from "react";
 import { Button } from "../../utils/button";
 import Link from "next/link";
-import { Database } from "@/lib/database.types";
-
-
-
-type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
-type RepairCategory = Database["public"]["Tables"]["repair_categories"]["Row"];
-type Factory = Database["public"]["Tables"]["factories"]["Row"];
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import Image from "next/image";
 
 type Props = {
   repair_template: any;
 };
 
-export const RepairsTemplateCard: FC<Props> = ({ repair_template }) => {
-  const url = process.env.url + "/storage/v1/object/public/repairs/";
+export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
+console.log(repair_template)
   return (
     <div className="border border-1 border-slate-200 rounded-md shadow-md overflow-hidden">
       <div className="py-1 flex justify-center text-sm font-bold bg-gray-100">
         {repair_template.factory?.name}
       </div>
       <div className="flex justify-center w-full">
-        {url && (
-          <img src={url + repair_template.image_path} width="100%" />
+        {repair_template.images[0] && (
+          <Image
+            src={repair_template.images[0].url}
+            width={100}
+            height={100}
+            alt=""
+            style={{ backgroundSize: "cover" }}
+            className="w-full"
+          />
         )}
       </div>
       <div className="p-3 pt-1">

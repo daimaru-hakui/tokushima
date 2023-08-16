@@ -32,6 +32,7 @@ export type RepairTemplate = {
     name: string;
   };
   image_path: string;
+  images: any[];
   customer: string;
   title: string;
   price: number;

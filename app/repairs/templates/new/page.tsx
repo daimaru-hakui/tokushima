@@ -17,8 +17,8 @@ const RepairTemplateNew = () => {
     color: "",
     position: "",
     image_path: "",
+    images:[],
     comment: "",
-
   };
 
   return (

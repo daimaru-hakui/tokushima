@@ -21,20 +21,21 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
   const defaultValues = {
     id: repairTemplate?.id,
     factory: {
-      id: repairTemplate.id,
-      name: repairTemplate.name,
+      id: repairTemplate?.id,
+      name: repairTemplate?.name,
     },
     category: {
-      id: repairTemplate.id,
-      name: repairTemplate.name,
+      id: repairTemplate?.id,
+      name: repairTemplate?.name,
     },
-    customer: repairTemplate.customer,
-    title: repairTemplate.title,
-    price: repairTemplate.price,
-    color: repairTemplate.color,
-    position: repairTemplate.position,
-    image_path: repairTemplate.image_path,
-    comment: repairTemplate.comment,
+    customer: repairTemplate?.customer,
+    title: repairTemplate?.title,
+    price: repairTemplate?.price,
+    color: repairTemplate?.color,
+    position: repairTemplate?.position,
+    image_path: repairTemplate?.image_path,
+    comment: repairTemplate?.comment,
+    images:repairTemplate?.images
   };
 
   return (
