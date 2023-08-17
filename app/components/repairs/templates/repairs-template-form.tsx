@@ -19,7 +19,7 @@ import { Database } from "@/lib/database.types";
 type Props = {
   pageType: "new" | "edit";
   defaultValues: RepairTemplate;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 export const RepairsTemplateForm: FC<Props> = ({
@@ -59,7 +59,7 @@ export const RepairsTemplateForm: FC<Props> = ({
         return;
       case "edit":
         await updateRepairTemplate(data, images);
-        onClose();
+        onClose && onClose();
         return;
     }
   };

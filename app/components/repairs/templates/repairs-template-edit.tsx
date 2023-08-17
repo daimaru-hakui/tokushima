@@ -24,7 +24,6 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
           <RepairsTemplateForm
             pageType="edit"
             defaultValues={repairTemplate}
-            setIsModal={setIsModal}
             onClose={onClose}
           />
         </div>
