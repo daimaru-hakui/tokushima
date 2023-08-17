@@ -9,8 +9,8 @@ type Props = {
 };
 
 export const RepairsTemplatePreview: FC<Props> = ({ file, deleteFile, pathType = 'file' }) => {
-  console.log(file.url)
-  if(!file.url && pathType === "file") return
+  if(!file.url && pathType === "url") return
+  if(!file && pathType === "file") return
   return (
     <div className="w-full relative">
       <Image

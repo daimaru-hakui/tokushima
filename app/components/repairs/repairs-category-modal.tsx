@@ -5,6 +5,7 @@ import { UseFormSetValue } from "react-hook-form";
 import { Repair, RepairTemplate } from "@/types";
 import { Button } from "../utils/button";
 import { RepairsCategoryList } from "./repairs-category-list";
+import { useModal } from "@/app/hooks/useModal";
 
 type Props = {
   setValue: UseFormSetValue<Repair | RepairTemplate | any>;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { FC, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -13,45 +14,64 @@ import { RepairTemplate } from "@/types";
 import { RepairsTemplatePreview } from "./repairs-template-preview";
 import { useRouter } from "next/navigation";
 import { Database } from "@/lib/database.types";
+import { useModal } from "@/app/hooks/useModal";
 
+// type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
 type Props = {
   pageType: "new" | "edit";
   defaultValues: RepairTemplate;
   setIsModal?: (payload: boolean) => void;
+  onClose: (e:any) => void;
 };
 
-export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
+export const RepairsTemplateForm: FC<Props> = ({
+  pageType,
+  defaultValues,
+  setIsModal,
+  onClose
+}) => {
   const supabase = createClientComponentClient<Database>();
-  const [price, setPrice] = useState<number | "">("");
-  const [fileUpload, setFileUpload] = useState<any>(defaultValues.images);
+  const pathname = defaultValues.id;
+  const router = useRouter();
+  const [price, setPrice] = useState<number>(defaultValues?.price || 0);
+  const [fileUpload, setFileUpload] = useState<any>([]);
   const {
     register,
     setValue,
-    getValues,
     watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues,
   });
-  useEffect(()=> {
-    setValue("factory",{
-      id:defaultValues.factory.id,
-      name:defaultValues.factory.name
-    })
-  },[])
-
+  useEffect(() => {
+    setValue("factory", {
+      id: defaultValues.factory.id,
+      name: defaultValues.factory.name,
+    });
+  }, [defaultValues.factory.id, defaultValues.factory.name]);
 
   const onSubmit: SubmitHandler<RepairTemplate> = async (
     data: RepairTemplate
   ) => {
-    console.log(data);
     const images = await addRepairImages(fileUpload);
-    await addRepairTemplate(data, images);
-    // router.push("/repairs/templates");
-    // router.refresh();
+    try {
+      if (pageType === "new") {
+        await addRepairTemplate(data, images);
+        router.push("/repairs/templates");
+      } else if (pageType === "edit") {
+        await updateRepairTemplate(data, images);
+        onClose(false);
+      } else {
+        console.log("pageTypeなし");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      router.refresh();
+    }
+    
   };
-
   const addRepairImages = async (fileUpload: any) => {
     if (fileUpload?.length === 0) return;
     const fileArray = fileUpload.map(async (image: any) => {
@@ -88,8 +108,8 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
   ) => {
     const { data, error } = await supabase.from("repair_templates").insert([
       {
-        factory_id: repair.factory.id,
-        category_id: repair.category.id,
+        factory_id: repair.factory.id || "",
+        category_id: repair.category.id || "",
         customer: repair.customer,
         title: repair.title,
         price: Number(repair.price),
@@ -102,7 +122,32 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
     console.log(error);
   };
 
-  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const updateRepairTemplate = async (
+    repair: RepairTemplate,
+    imagePath: string[] = []
+  ) => {
+    console.log("1", defaultValues.id, pathname);
+    const { data, error } = await supabase
+      .from("repair_templates")
+      .update({
+        factory_id: repair.factory.id,
+        category_id: repair.category.id,
+        customer: repair.customer,
+        title: repair.title,
+        price: Number(repair.price),
+        color: repair.color,
+        position: repair.position,
+        images: defaultValues.images
+          ? [...defaultValues.images, ...imagePath]
+          : [...imagePath],
+        comment: repair.comment,
+      })
+      .eq("id", pathname)
+      .select();
+    console.log(error);
+  };
+
+  const addPreviewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const files: any = e.target.files;
     setFileUpload((prev: any) => [...prev, files[0]]);
@@ -111,14 +156,20 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
   const deletePreviewFile = (idx: number) => {
     setFileUpload(fileUpload.filter((_: any, index: number) => index !== idx));
   };
+
   const deleteImageFile = async (idx: number) => {
-    const images = getValues("images").filter((image, index) => index !== idx);
+    const result = confirm("画像を削除して宜しいでしょうか");
+    if (!result) return;
+    const images = watch("images")?.filter((_, index) => index !== idx);
+    setValue("images", images);
     const { data, error } = await supabase
       .from("repair_templates")
       .update({ images })
       .match({ id: defaultValues.id });
-    console.log(images);
+    router.refresh();
   };
+
+  console.log(fileUpload);
 
   return (
     <form
@@ -250,44 +301,76 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
                 />
               ))}
           </div>
-        </>
-      )}
-
-      <div className="mt-6 mb-2 text-sm font-bold">画像をアップロード</div>
-      {fileUpload?.length < 3 && (
-        <div className="flex gap-6 text-slate-400">
-          <div className="flex justify-center w-full h-[250px] border-dashed border-2 border-slate-200 relative">
+          <div className="mt-6 flex justify-center w-full h-[200px] border-dashed border-2 border-slate-200 relative">
             <label
               htmlFor="image"
-              className="absolute top-0 left-0 z-0 w-full h-full flex items-center justify-center"
+              className="absolute top-0 left-0 z-0 w-full h-full flex items-center justify-center text-slate-400"
             >
-              <div className="flex items-center justify-center flex-col">
+              <div className="flex items-center justify-center flex-col ">
                 <BiCloudUpload fontSize="80px" />
-                <p>ファイルをここにドラッグ＆ドロップしてください。</p>
+                <p>ファイルを追加する</p>
               </div>
             </label>
             <input
               id="image"
               type="file"
               className="w-full opacity-0 z-1 cursor-pointer"
-              // {...register("images")}
-              onChange={addImage}
+              onChange={addPreviewImage}
             />
           </div>
-        </div>
+          <div className="mt-3 w-full flex gap-3">
+            {fileUpload?.length > 0 &&
+              fileUpload?.map((image: any, idx: number) => (
+                <div key={idx}>
+                  <RepairsTemplatePreview
+                    key={idx}
+                    file={image}
+                    pathType="file"
+                    deleteFile={deletePreviewFile.bind(null, idx)}
+                  />
+                </div>
+              ))}
+          </div>
+        </>
       )}
 
       {pageType === "new" && (
-        <div className="mt-3 w-full flex gap-3">
-          {fileUpload?.length >= 1 &&
-            fileUpload?.map((file: any, idx: number) => (
-              <RepairsTemplatePreview
-                key={idx}
-                file={file}
-                deleteFile={deletePreviewFile.bind(null, idx)}
-              />
-            ))}
-        </div>
+        <>
+          <div className="mt-6 mb-2 text-sm font-bold">画像をアップロード</div>
+          {fileUpload?.length < 3 && (
+            <div className="flex gap-6">
+              <div className="flex justify-center w-full h-[250px] border-dashed border-2 border-slate-200 relative">
+                <label
+                  htmlFor="image"
+                  className="absolute top-0 left-0 z-0 w-full h-full flex items-center justify-center text-slate-400"
+                >
+                  <div className="flex items-center justify-center flex-col">
+                    <BiCloudUpload fontSize="80px" />
+                    <p>ファイルをここにドラッグ＆ドロップしてください。</p>
+                  </div>
+                </label>
+                <input
+                  id="image"
+                  type="file"
+                  className="w-full opacity-0 z-1 cursor-pointer"
+                  onChange={addPreviewImage}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="mt-3 w-full flex gap-3">
+            {fileUpload?.length >= 1 &&
+              fileUpload?.map((file: any, idx: number) => (
+                <RepairsTemplatePreview
+                  key={idx}
+                  file={file}
+                  pathType="file"
+                  deleteFile={deletePreviewFile.bind(null, idx)}
+                />
+              ))}
+          </div>
+        </>
       )}
 
       <div className="mt-6">
@@ -299,7 +382,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
       </div>
       <div className="mt-6 flex justify-center">
         <Button type="submit" bg="bg-black">
-          登録
+          {pageType === "new" ? "登録" : "更新"}
         </Button>
       </div>
     </form>

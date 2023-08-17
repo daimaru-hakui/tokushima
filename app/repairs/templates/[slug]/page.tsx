@@ -1,23 +1,20 @@
 import { RepairsTemplateEdit } from "@/app/components/repairs/templates/repairs-template-edit";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import React from "react";
 import { cookies } from "next/headers";
-import { FaRegEdit } from "react-icons/fa";
 import { Database } from "@/lib/database.types";
 import Image from "next/image";
-import Link from "next/link";
+import { RepairTemplate } from "@/types";
 
 const TemplateById = async ({ params }: { params: { slug: string } }) => {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const URL = process.env.url + "/storage/v1/object/public/repairs/";
   const { data: repair_template, error } = await supabase
     .from("repair_templates")
     .select(`*,repair_categories(id,name),factories(id,name)`)
     .eq("id", params.slug)
     .single();
 
-  const defaultValues = {
-    id: "",
+  const defaultValues:RepairTemplate = {
+    id: repair_template?.id,
     factory: {
       id: repair_template?.factories?.id,
       name: repair_template?.factories?.name,
@@ -32,11 +29,11 @@ const TemplateById = async ({ params }: { params: { slug: string } }) => {
     color: repair_template?.color,
     position: repair_template?.position,
     image_path: "",
-    images: repair_template?.images,
+    images: repair_template?.images || [],
     comment: repair_template?.comment,
   };
 
-  console.log(repair_template?.factories?.id,)
+  console.log(repair_template?.factories?.id);
 
   const styles = {
     container: "mt-6 flex flex-col md:flex-row gap-6 justify-between",

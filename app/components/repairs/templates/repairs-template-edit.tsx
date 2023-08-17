@@ -2,22 +2,23 @@
 import React, { FC, useState } from "react";
 import { Modal } from "../../utils/modal/modal";
 import { Database } from "@/lib/database.types";
-import { RepairsTemplateForm2 } from "./repairs-template-form2";
 import { FaRegEdit } from "react-icons/fa";
 import { RepairsTemplateForm } from "./repairs-template-form";
+import { RepairTemplate } from "@/types";
+import { useModal } from "@/app/hooks/useModal";
 
-type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Update"];
 
 type Props = {
-  repairTemplate: any;
+  repairTemplate: RepairTemplate 
 };
 
 export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
-  const [isModal, setIsModal] = useState(false);
-  const onOpen = (e: any) => {
-    window.document.body.style.overflowY = "hidden";
-    setIsModal(true);
-  };
+  const {isModal, setIsModal,onOpen,onClose} = useModal()
+  // const [isModal, setIsModal] = useState(false);
+  // const onOpen = (e: any) => {
+  //   window.document.body.style.overflowY = "hidden";
+  //   setIsModal(true);
+  // };
 
   return (
     <>
@@ -28,6 +29,7 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
             pageType="edit"
             defaultValues={repairTemplate}
             setIsModal={setIsModal}
+            onClose={onClose}
           />
         </div>
       </Modal>
