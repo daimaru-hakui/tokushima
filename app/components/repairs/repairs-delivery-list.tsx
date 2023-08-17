@@ -33,7 +33,7 @@ export const RepairsDeliveryList: FC<Props> = ({ setValue, setIsModal }) => {
       setDeliveryPlaces(data);
     };
     getDeliveryPlace();
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     const newArray = deliveryPlaces?.filter((deliveryPlace) =>

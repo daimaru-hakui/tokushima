@@ -2,8 +2,9 @@
 import React, { FC, useState } from "react";
 import { Modal } from "../../utils/modal/modal";
 import { Database } from "@/lib/database.types";
-import { RepairsTemplateForm } from "./repairs-template-form";
+import { RepairsTemplateForm2 } from "./repairs-template-form2";
 import { FaRegEdit } from "react-icons/fa";
+import { RepairsTemplateForm } from "./repairs-template-form";
 
 type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Update"];
 
@@ -18,26 +19,6 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
     setIsModal(true);
   };
 
-  const defaultValues = {
-    id: repairTemplate?.id,
-    factory: {
-      id: repairTemplate?.id,
-      name: repairTemplate?.name,
-    },
-    category: {
-      id: repairTemplate?.id,
-      name: repairTemplate?.name,
-    },
-    customer: repairTemplate?.customer,
-    title: repairTemplate?.title,
-    price: repairTemplate?.price,
-    color: repairTemplate?.color,
-    position: repairTemplate?.position,
-    comment: repairTemplate?.comment,
-    image_path: repairTemplate?.image_path,
-    images: repairTemplate?.images
-  };
-
   return (
     <>
       <FaRegEdit cursor="pointer" onClick={onOpen} />
@@ -45,7 +26,7 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
         <div className="px-6">
           <RepairsTemplateForm
             pageType="edit"
-            defaultValues={defaultValues}
+            defaultValues={repairTemplate}
             setIsModal={setIsModal}
           />
         </div>

@@ -16,6 +16,7 @@ import { Input } from "../utils/input/input";
 import { PiPlusBold } from "react-icons/pi";
 import { FaTrashAlt } from "react-icons/fa";
 import { RepairContentList } from "./repairs-content-list";
+import Image from "next/image";
 
 type Inputs = {
   factory: string;
@@ -62,7 +63,7 @@ export const RepairsContentForm: FC<Props> = ({
     append({
       title: "",
       image: "",
-      price: 0
+      price: 0,
     });
   };
 
@@ -98,15 +99,22 @@ export const RepairsContentForm: FC<Props> = ({
     <>
       {fields.map((field, idx) => (
         <React.Fragment key={field.id}>
-          {(watch("repair_contents")[idx].title) && (
-            <div id={`content-${idx}`} style={{ transformOrigin: "top" }} className="w-full mt-6 p-6 flex items-center justify-between gap-3">
+          {watch("repair_contents")[idx].title && (
+            <div
+              id={`content-${idx}`}
+              style={{ transformOrigin: "top" }}
+              className="w-full mt-6 p-6 flex items-center justify-between gap-3"
+            >
               <div className="flex gap-3">
                 <div className="w-full">
                   <Input
                     className="hidden"
                     register={{ ...register(`repair_contents.${idx}.image`) }}
                   />
-                  <img
+                  <Image
+                    width={100}
+                    height={100}
+                    alt=""
                     src={watch("repair_contents")[idx].image}
                     className="border border-1 border-gray-100 shadow-sm"
                   />
@@ -115,7 +123,11 @@ export const RepairsContentForm: FC<Props> = ({
                   <div className="p-1 w-full">
                     <Input
                       className="hidden"
-                      register={{ ...register(`repair_contents.${idx}.title`, { required: true }) }}
+                      register={{
+                        ...register(`repair_contents.${idx}.title`, {
+                          required: true,
+                        }),
+                      }}
                     />
                     {watch("repair_contents")[idx].title}
                   </div>
@@ -123,7 +135,8 @@ export const RepairsContentForm: FC<Props> = ({
                     <Input
                       className=""
                       register={{ ...register(`repair_contents.${idx}.price`) }}
-                    />円
+                    />
+                    円
                   </div>
                 </div>
               </div>
@@ -175,13 +188,13 @@ export const RepairsContentForm: FC<Props> = ({
       ))}
       {(watch("repair_contents")[length - 1]?.title ||
         watch("repair_contents").length === 0) && (
-          <div className="w-full mt-6 flex justify-center">
-            <Button type="button" size="sm" bg="bg-black" onClick={addContent}>
-              <PiPlusBold className="mr-1" />
-              追加
-            </Button>
-          </div>
-        )}
+        <div className="w-full mt-6 flex justify-center">
+          <Button type="button" size="sm" bg="bg-black" onClick={addContent}>
+            <PiPlusBold className="mr-1" />
+            追加
+          </Button>
+        </div>
+      )}
     </>
   );
 };

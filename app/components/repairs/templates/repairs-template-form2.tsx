@@ -20,10 +20,21 @@ type Props = {
   setIsModal?: (payload: boolean) => void;
 };
 
-export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
+export const RepairsTemplateForm2: FC<Props> = async ({
+  pageType,
+  defaultValues,
+}) => {
   const supabase = createClientComponentClient<Database>();
   const [price, setPrice] = useState<number | "">("");
   const [fileUpload, setFileUpload] = useState<any>(defaultValues.images);
+
+  // useEffect(() => {
+  //   const getUserId = async () => {
+  //     const { data } = await supabase.auth.getUser();
+  //     setUserId(data.user?.id);
+  //   };
+  //   getUserId();
+  // }, []);
   const {
     register,
     setValue,
@@ -34,17 +45,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
   } = useForm({
     defaultValues,
   });
-  useEffect(()=> {
-    setValue("factory",{
-      id:defaultValues.factory.id,
-      name:defaultValues.factory.name
-    })
-  },[])
-
-
-  const onSubmit: SubmitHandler<RepairTemplate> = async (
-    data: RepairTemplate
-  ) => {
+  const onSubmit:SubmitHandler<RepairTemplate> = async (data: RepairTemplate) => {
     console.log(data);
     const images = await addRepairImages(fileUpload);
     await addRepairTemplate(data, images);
@@ -102,23 +103,26 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
     console.log(error);
   };
 
-  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const files: any = e.target.files;
-    setFileUpload((prev: any) => [...prev, files[0]]);
-  };
-
   const deletePreviewFile = (idx: number) => {
     setFileUpload(fileUpload.filter((_: any, index: number) => index !== idx));
   };
-  const deleteImageFile = async (idx: number) => {
-    const images = getValues("images").filter((image, index) => index !== idx);
-    const { data, error } = await supabase
-      .from("repair_templates")
-      .update({ images })
-      .match({ id: defaultValues.id });
-    console.log(images);
+
+  // const deleteImageFile = async (idx: number) => {
+  //   const images = getValues("images").filter((image, index) => index !== idx);
+  //   const { data, error } = await supabase
+  //     .from("repair_templates")
+  //     .update({ images })
+  //     .match({ id: defaultValues.id });
+  //   console.log(images);
+  // };
+
+  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const files: FileList | any = e.target.files;
+    setFileUpload((prev: any) => [...prev, files[0]]);
   };
+
+  console.log(fileUpload);
 
   return (
     <form
@@ -236,7 +240,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
         </div>
       </div>
 
-      {pageType === "edit" && (
+      {/* {pageType === "edit" && (
         <>
           <div className="mt-6 text-sm font-bold">仕様書</div>
           <div className="mt-3 w-full flex gap-3">
@@ -251,7 +255,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
               ))}
           </div>
         </>
-      )}
+      )} */}
 
       <div className="mt-6 mb-2 text-sm font-bold">画像をアップロード</div>
       {fileUpload?.length < 3 && (
@@ -277,7 +281,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
         </div>
       )}
 
-      {pageType === "new" && (
+      {/* {pageType === "new" && (
         <div className="mt-3 w-full flex gap-3">
           {fileUpload?.length >= 1 &&
             fileUpload?.map((file: any, idx: number) => (
@@ -288,7 +292,7 @@ export const RepairsTemplateForm: FC<Props> = ({ pageType, defaultValues }) => {
               />
             ))}
         </div>
-      )}
+      )} */}
 
       <div className="mt-6">
         <div className=" mb-2 font-bold text-sm">備考</div>

@@ -66,7 +66,7 @@ export const RepairForm: FC = () => {
                 className="mt-4 flex-1"
                 type="text"
                 label="工場名"
-                register={{ ...register("factory", { required: true }) }}
+                register={{ ...register("factory.name", { required: true }) }}
               />
               <div>
                 <RepairsFactoryModal setValue={setValue} />

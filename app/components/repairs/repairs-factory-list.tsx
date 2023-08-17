@@ -31,7 +31,7 @@ export const RepairFactoryList: FC<Props> = ({
       setFactories(data);
     };
     getFactories();
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     const newArray = factories?.filter((factory) =>

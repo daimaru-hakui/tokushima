@@ -28,7 +28,7 @@ export const Modal: FC<Props> = ({
         setTimeout(() => {
           modal.style.opacity = i.toString();
           i = i - 0.02;
-          if (i < 0) {
+          if (i <= 0) {
             setIsModal(false);
             window.document.body.style.overflowY = "auto";
             return;

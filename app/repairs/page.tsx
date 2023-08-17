@@ -18,7 +18,6 @@ const Repairs:NextPage = async () => {
   if (!session) {
     redirect("/auth/login");
   }
-
   const list = [
     {
       name: "修理伝票一覧",

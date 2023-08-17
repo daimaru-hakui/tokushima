@@ -5,8 +5,9 @@ import { cookies } from "next/headers";
 import { FaRegEdit } from "react-icons/fa";
 import { Database } from "@/lib/database.types";
 import Image from "next/image";
+import Link from "next/link";
 
-const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
+const TemplateById = async ({ params }: { params: { slug: string } }) => {
   const supabase = createServerComponentClient<Database>({ cookies });
   const URL = process.env.url + "/storage/v1/object/public/repairs/";
   const { data: repair_template, error } = await supabase
@@ -14,6 +15,28 @@ const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
     .select(`*,repair_categories(id,name),factories(id,name)`)
     .eq("id", params.slug)
     .single();
+
+  const defaultValues = {
+    id: "",
+    factory: {
+      id: repair_template?.factories?.id,
+      name: repair_template?.factories?.name,
+    },
+    category: {
+      id: repair_template?.repair_categories?.id,
+      name: repair_template?.repair_categories?.name,
+    },
+    title: repair_template?.title,
+    customer: repair_template?.customer,
+    price: repair_template?.price,
+    color: repair_template?.color,
+    position: repair_template?.position,
+    image_path: "",
+    images: repair_template?.images,
+    comment: repair_template?.comment,
+  };
+
+  console.log(repair_template?.factories?.id,)
 
   const styles = {
     container: "mt-6 flex flex-col md:flex-row gap-6 justify-between",
@@ -26,7 +49,7 @@ const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
       <div className="py-2 mb-6 text-2xl border-b border-gray-200 flex items-center justify-between">
         <div>詳細</div>
         <div>
-          <RepairsTemplateEdit repairTemplate={repair_template} />
+          <RepairsTemplateEdit repairTemplate={defaultValues} />
         </div>
       </div>
       <div className={styles.container}>

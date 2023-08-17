@@ -31,7 +31,7 @@ export const RepairsCategoryList: FC<Props> = ({ setValue, setIsModal }) => {
       setCategories(data);
     };
     getDeliveryPlace();
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     const newArray = categories?.filter((category) =>
