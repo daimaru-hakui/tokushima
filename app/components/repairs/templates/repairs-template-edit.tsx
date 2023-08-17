@@ -33,9 +33,9 @@ export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
     price: repairTemplate?.price,
     color: repairTemplate?.color,
     position: repairTemplate?.position,
-    image_path: repairTemplate?.image_path,
     comment: repairTemplate?.comment,
-    images:repairTemplate?.images
+    image_path: repairTemplate?.image_path,
+    images: repairTemplate?.images
   };
 
   return (

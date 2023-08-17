@@ -23,6 +23,7 @@ export type Repair = {
 };
 
 export type RepairTemplate = {
+  id: string;
   factory: {
     id: string;
     name: string;

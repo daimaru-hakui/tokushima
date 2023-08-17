@@ -6,7 +6,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { Database } from "@/lib/database.types";
 import Image from "next/image";
 
-const TemplateById = async ({ params }: { params: { slug: string } }) => {
+const TemplateById = async ({ params }: { params: { slug: string; }; }) => {
   const supabase = createServerComponentClient<Database>({ cookies });
   const URL = process.env.url + "/storage/v1/object/public/repairs/";
   const { data: repair_template, error } = await supabase
@@ -82,14 +82,14 @@ const TemplateById = async ({ params }: { params: { slug: string } }) => {
         </div>
         <div className="mt-3 w-full flex gap-3">
           {repair_template?.images &&
-            repair_template?.images.map((image) => (
-              <div key={image} className="mt-3 w-full">
+            repair_template?.images.map((image: any) => (
+              <div key={image.id} className="mt-3 w-full">
                 <Image
                   width={100}
                   height={100}
                   alt=""
                   className="shadow-md border border-1 border-gray-100 w-full"
-                  src={image}
+                  src={image.url}
                 />
               </div>
             ))}

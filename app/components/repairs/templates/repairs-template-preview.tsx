@@ -5,16 +5,17 @@ import { IoMdCloseCircle } from "react-icons/io";
 type Props = {
   file: any;
   deleteFile: () => void;
+  pathType?: "url" | "file";
 };
 
-export const RepairsTemplatePreview: FC<Props> = ({ file, deleteFile }) => {
+export const RepairsTemplatePreview: FC<Props> = ({ file, deleteFile, pathType = 'file' }) => {
   return (
     <div className="w-full relative">
       <Image
         alt=""
         width="100"
         height="100"
-        src={URL.createObjectURL(file)}
+        src={pathType === 'file' ? URL.createObjectURL(file) : file?.url}
         style={{ width: "100%", height: "auto", objectFit: "cover" }}
         className="p-3 border border-1 border-gray-200"
       />
