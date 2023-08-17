@@ -13,12 +13,8 @@ type Props = {
 };
 
 export const RepairsTemplateEdit: FC<Props> = ({ repairTemplate }) => {
-  const {isModal, setIsModal,onOpen,onClose} = useModal()
-  // const [isModal, setIsModal] = useState(false);
-  // const onOpen = (e: any) => {
-  //   window.document.body.style.overflowY = "hidden";
-  //   setIsModal(true);
-  // };
+  const [isModal, setIsModal] = useState(false);
+  const {onOpen,onClose} = useModal(setIsModal)
 
   return (
     <>

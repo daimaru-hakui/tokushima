@@ -14,27 +14,24 @@ import { RepairTemplate } from "@/types";
 import { RepairsTemplatePreview } from "./repairs-template-preview";
 import { useRouter } from "next/navigation";
 import { Database } from "@/lib/database.types";
-import { useModal } from "@/app/hooks/useModal";
 
 // type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
 type Props = {
   pageType: "new" | "edit";
   defaultValues: RepairTemplate;
-  setIsModal?: (payload: boolean) => void;
-  onClose: (e:any) => void;
+  onClose: () => void;
 };
 
 export const RepairsTemplateForm: FC<Props> = ({
   pageType,
   defaultValues,
-  setIsModal,
-  onClose
+  onClose,
 }) => {
   const supabase = createClientComponentClient<Database>();
   const pathname = defaultValues.id;
   const router = useRouter();
   const [price, setPrice] = useState<number>(defaultValues?.price || 0);
-  const [fileUpload, setFileUpload] = useState<any>([]);
+  const [fileUpload, setFileUpload] = useState<File[]>([]);
   const {
     register,
     setValue,
@@ -55,26 +52,21 @@ export const RepairsTemplateForm: FC<Props> = ({
     data: RepairTemplate
   ) => {
     const images = await addRepairImages(fileUpload);
-    try {
-      if (pageType === "new") {
+    switch (pageType) {
+      case "new":
         await addRepairTemplate(data, images);
         router.push("/repairs/templates");
-      } else if (pageType === "edit") {
+        return;
+      case "edit":
         await updateRepairTemplate(data, images);
-        onClose(false);
-      } else {
-        console.log("pageTypeなし");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      router.refresh();
+        onClose();
+        return;
     }
-    
   };
-  const addRepairImages = async (fileUpload: any) => {
+
+  const addRepairImages = async (fileUpload: File[]) => {
     if (fileUpload?.length === 0) return;
-    const fileArray = fileUpload.map(async (image: any) => {
+    const fileArray = fileUpload.map(async (image: File) => {
       const uuid = uuidv4();
       const { data: inputData, error: inputError } = await supabase.storage
         .from("repairs")
@@ -124,9 +116,8 @@ export const RepairsTemplateForm: FC<Props> = ({
 
   const updateRepairTemplate = async (
     repair: RepairTemplate,
-    imagePath: string[] = []
+    imagePath: { path: string; url: string }[] = []
   ) => {
-    console.log("1", defaultValues.id, pathname);
     const { data, error } = await supabase
       .from("repair_templates")
       .update({
@@ -144,13 +135,17 @@ export const RepairsTemplateForm: FC<Props> = ({
       })
       .eq("id", pathname)
       .select();
-    console.log(error);
+    if (error) {
+      console.log(error);
+      console.log("失敗")
+    }
   };
 
   const addPreviewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const files: any = e.target.files;
-    setFileUpload((prev: any) => [...prev, files[0]]);
+    const files: FileList | null = e.target.files;
+    if (!files) return;
+    setFileUpload((prev: File[]) => [...prev, files[0]]);
   };
 
   const deletePreviewFile = (idx: number) => {
@@ -168,8 +163,6 @@ export const RepairsTemplateForm: FC<Props> = ({
       .match({ id: defaultValues.id });
     router.refresh();
   };
-
-  console.log(fileUpload);
 
   return (
     <form
@@ -292,14 +285,16 @@ export const RepairsTemplateForm: FC<Props> = ({
           <div className="mt-6 text-sm font-bold">仕様書</div>
           <div className="mt-3 w-full flex gap-3">
             {watch("images") &&
-              watch("images")?.map((image: any, idx: number) => (
-                <RepairsTemplatePreview
-                  key={idx}
-                  file={image}
-                  pathType="url"
-                  deleteFile={deleteImageFile.bind(null, idx)}
-                />
-              ))}
+              watch("images")?.map(
+                (image: { path: string; url: string }, idx: number) => (
+                  <RepairsTemplatePreview
+                    key={idx}
+                    file={image}
+                    pathType="url"
+                    deleteFile={deleteImageFile.bind(null, idx)}
+                  />
+                )
+              )}
           </div>
           <div className="mt-6 flex justify-center w-full h-[200px] border-dashed border-2 border-slate-200 relative">
             <label
@@ -320,7 +315,7 @@ export const RepairsTemplateForm: FC<Props> = ({
           </div>
           <div className="mt-3 w-full flex gap-3">
             {fileUpload?.length > 0 &&
-              fileUpload?.map((image: any, idx: number) => (
+              fileUpload?.map((image: File, idx: number) => (
                 <div key={idx}>
                   <RepairsTemplatePreview
                     key={idx}
@@ -361,7 +356,7 @@ export const RepairsTemplateForm: FC<Props> = ({
 
           <div className="mt-3 w-full flex gap-3">
             {fileUpload?.length >= 1 &&
-              fileUpload?.map((file: any, idx: number) => (
+              fileUpload?.map((file: File, idx: number) => (
                 <RepairsTemplatePreview
                   key={idx}
                   file={file}

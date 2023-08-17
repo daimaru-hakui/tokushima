@@ -4,12 +4,13 @@ import { Modal } from "../utils/modal/modal";
 import { SettingsFactoryForm } from "./settings-factory-form";
 import { Database } from "@/lib/database.types";
 import { Button } from "../utils/button";
+import { useModal } from "@/app/hooks/useModal";
 
 type Factory = Database["public"]["Tables"]["factories"]["Row"];
 
 export const SettingsFactoryEdit = ({ factory }: { factory: Factory; }) => {
   const [isModal, setIsModal] = useState(false);
-  const onOpen = () => setIsModal(true);
+  const {onOpen,onClose} = useModal(setIsModal)
 
   const defaultValues = {
     id: factory.id,

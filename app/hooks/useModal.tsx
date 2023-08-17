@@ -1,10 +1,8 @@
 "use client";
-import { useState } from "react";
 
-export const useModal = () => {
-  const [isModal, setIsModal] = useState(false);
+export const useModal = (setIsModal: (payload: boolean) => void) => {
   const onOpen = () => setIsModal(true);
-  const onClose = (e: any) => {
+  const onClose = () => {
     const modal = document.getElementById("modal");
     if (modal) {
       let i = 1;
@@ -23,5 +21,5 @@ export const useModal = () => {
       fadeOut();
     }
   };
-  return{isModal,setIsModal,onOpen,onClose}
+  return { onOpen, onClose };
 };

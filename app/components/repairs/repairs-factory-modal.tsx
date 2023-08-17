@@ -5,6 +5,7 @@ import { UseFormSetValue } from "react-hook-form";
 import { Repair } from "@/types";
 import { RepairFactoryList } from "./repairs-factory-list";
 import { Button } from "../utils/button";
+import { useModal } from "@/app/hooks/useModal";
 
 type Props = {
   setValue: UseFormSetValue<Repair | any>;
@@ -12,7 +13,7 @@ type Props = {
 
 export const RepairsFactoryModal: FC<Props> = ({ setValue }) => {
   const [isModal, setIsModal] = useState(false);
-  const onOpen = () => setIsModal(true);
+  const {onOpen,onClose} = useModal(setIsModal)
   return (
     <>
       <Button type="button" bg="bg-black" size="md" onClick={onOpen}>

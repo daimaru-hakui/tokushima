@@ -19,8 +19,7 @@ export const Modal: FC<Props> = ({
   setIsModal,
 }) => {
 
-  const onOpen = () => setIsModal(true);
-  const onClose = (e: any) => {
+  const onClose = () => {
     const modal = document.getElementById("modal");
     if (modal) {
       let i = 1;

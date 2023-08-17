@@ -12,8 +12,10 @@ type Props = {
 };
 
 export const RepairsCategoryModal: FC<Props> = ({ setValue }) => {
+  // const [isModal, setIsModal] = useState(false);
+  // const onOpen = () => setIsModal(true);
   const [isModal, setIsModal] = useState(false);
-  const onOpen = () => setIsModal(true);
+  const {onOpen,onClose} = useModal(setIsModal)
   return (
     <>
       <Button type="button" bg="bg-black" size="md" onClick={onOpen}>

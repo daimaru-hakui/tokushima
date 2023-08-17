@@ -4,12 +4,13 @@ import { Modal } from "../utils/modal/modal";
 import { Database } from "@/lib/database.types";
 import { Button } from "../utils/button";
 import { SettingsRepairCategoryForm } from "./settings-repair-category-form";
+import { useModal } from "@/app/hooks/useModal";
 
 type Category = Database["public"]["Tables"]["repair_categories"]["Row"];
 
 export const SettingsRepairCategoryEdit = ({ category }: { category: Category; }) => {
   const [isModal, setIsModal] = useState(false);
-  const onOpen = () => setIsModal(true);
+  const {onOpen} = useModal(setIsModal);
 
   const defaultValues = {
     id: category.id,

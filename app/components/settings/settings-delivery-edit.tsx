@@ -4,6 +4,7 @@ import { Modal } from "../utils/modal/modal";
 import { SettingsDeliveryForm } from "./settings-delivery-form";
 import { Database } from "@/lib/database.types";
 import { Button } from "../utils/button";
+import { useModal } from "@/app/hooks/useModal";
 
 type DeliveryPlace = Database["public"]["Tables"]["delivery_places"]["Row"];
 
@@ -13,7 +14,7 @@ type Props = {
 
 export const SettingsDeliveryEdit: FC<Props> = ({ deliveryPlace }) => {
   const [isModal, setIsModal] = useState(false);
-  const onOpen = () => setIsModal(true);
+  const {onOpen,onClose} = useModal(setIsModal)
 
   const defaultValues = {
     id: deliveryPlace?.id,
