@@ -1,16 +1,28 @@
 import React, { FC } from "react";
 import { Button } from "../../utils/button";
 import Link from "next/link";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import Image from "next/image";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import {cookies} from "next/headers"
+import { Database } from "@/database.types";
 
 type Props = {
   repair_template: any;
 };
 
+const getImage = async(file:string[]) => {
+  const supabase = createServerComponentClient<Database>({cookies})
+  const { data, error } = await supabase.storage
+  .from("repairs")
+  .createSignedUrl(file[0], 600);
+  if(error) return
+  return data?.signedUrl
+}
+ 
 export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
-  console.log(repair_template);
+
+  const url = await getImage(repair_template.images)
+
   return (
     <div className="border border-1 border-slate-200 rounded-md shadow-md overflow-hidden">
       <div className="py-1 flex justify-center text-sm font-bold bg-gray-100">
@@ -19,7 +31,7 @@ export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
       <div className="flex justify-center w-full">
         {repair_template.images[0] && (
           <Image
-            src={repair_template.images[0].url}
+            src={url || ""}
             width={100}
             height={100}
             alt=""

@@ -1,19 +1,26 @@
+"use server";
 import { RepairsTemplateEdit } from "@/app/components/repairs/templates/repairs-template-edit";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Database } from "@/lib/database.types";
-import Image from "next/image";
 import { RepairTemplate } from "@/types";
+import { RepairsTemplatePreview } from "@/app/components/repairs/templates/repairs-template-preview";
 
-const TemplateById = async ({ params }: { params: { slug: string } }) => {
-  const supabase = createServerComponentClient<Database>({ cookies });
-  const { data: repair_template, error } = await supabase
+const supabase = createServerComponentClient<Database>({ cookies });
+
+const getTemplates = async (id: string) => {
+  const { data, error } = await supabase
     .from("repair_templates")
     .select(`*,repair_categories(id,name),factories(id,name)`)
-    .eq("id", params.slug)
+    .eq("id", id)
     .single();
+  return data;
+};
 
-  const defaultValues:RepairTemplate = {
+const TemplateById = async ({ params }: { params: { id: string } }) => {
+  const repair_template = await getTemplates(params.id);
+
+  const defaultValues: RepairTemplate = {
     id: repair_template?.id,
     factory: {
       id: repair_template?.factories?.id,
@@ -32,8 +39,6 @@ const TemplateById = async ({ params }: { params: { slug: string } }) => {
     images: repair_template?.images || [],
     comment: repair_template?.comment,
   };
-
-  console.log(repair_template?.factories?.id);
 
   const styles = {
     container: "mt-6 flex flex-col md:flex-row gap-6 justify-between",
@@ -102,16 +107,13 @@ const TemplateById = async ({ params }: { params: { slug: string } }) => {
         </div>
         <div className="mt-3 w-full flex gap-3">
           {repair_template?.images &&
-            repair_template?.images.map((image: any) => (
-              <div key={image.id} className="mt-3 w-full">
-                <Image
-                  width={100}
-                  height={100}
-                  alt=""
-                  className="shadow-md border border-1 border-gray-100 w-full"
-                  src={image.url}
-                />
-              </div>
+            repair_template?.images?.map((image:string) => (
+              <RepairsTemplatePreview
+                key={image}
+                file={image}
+                pathType="path"
+                closeButon={false}
+              />
             ))}
         </div>
       </div>

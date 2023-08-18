@@ -56,9 +56,11 @@ export const RepairsTemplateForm: FC<Props> = ({
       case "new":
         await addRepairTemplate(data, images);
         router.push("/repairs/templates");
+        router.refresh()
         return;
       case "edit":
         await updateRepairTemplate(data, images);
+        router.refresh()
         onClose && onClose();
         return;
     }
@@ -68,20 +70,14 @@ export const RepairsTemplateForm: FC<Props> = ({
     if (fileUpload?.length === 0) return;
     const fileArray = fileUpload.map(async (image: File) => {
       const uuid = uuidv4();
-      const { data: inputData, error: inputError } = await supabase.storage
+      const { data: inputData, error} = await supabase.storage
         .from("repairs")
-        .upload(uuid + ".png", image, {
+        .upload(uuid, image, {
           cacheControl: "3600",
           upsert: false,
         });
-      if (inputError) return;
-
-      const { data, error } = await supabase.storage
-        .from("repairs")
-        .createSignedUrl(inputData.path, 600);
-
       if (error) return;
-      return { path: inputData.path, url: data?.signedUrl };
+      return inputData.path
     });
     return await pathArray(fileArray);
   };
@@ -128,8 +124,8 @@ export const RepairsTemplateForm: FC<Props> = ({
         price: Number(repair.price),
         color: repair.color,
         position: repair.position,
-        images: defaultValues.images
-          ? [...defaultValues.images, ...imagePath]
+        images: watch("images")
+          ? [...watch("images") || [], ...imagePath]
           : [...imagePath],
         comment: repair.comment,
       })
@@ -137,7 +133,6 @@ export const RepairsTemplateForm: FC<Props> = ({
       .select();
     if (error) {
       console.log(error);
-      console.log("失敗")
     }
   };
 
@@ -153,15 +148,13 @@ export const RepairsTemplateForm: FC<Props> = ({
   };
 
   const deleteImageFile = async (idx: number) => {
-    const result = confirm("画像を削除して宜しいでしょうか");
-    if (!result) return;
     const images = watch("images")?.filter((_, index) => index !== idx);
     setValue("images", images);
-    const { data, error } = await supabase
-      .from("repair_templates")
-      .update({ images })
-      .match({ id: defaultValues.id });
-    router.refresh();
+    // const { data, error } = await supabase
+    //   .from("repair_templates")
+    //   .update({ images })
+    //   .match({ id: defaultValues.id });
+    // router.refresh();
   };
 
   return (
@@ -286,11 +279,11 @@ export const RepairsTemplateForm: FC<Props> = ({
           <div className="mt-3 w-full flex gap-3">
             {watch("images") &&
               watch("images")?.map(
-                (image: { path: string; url: string }, idx: number) => (
+                (image:string, idx: number) => (
                   <RepairsTemplatePreview
                     key={idx}
                     file={image}
-                    pathType="url"
+                    pathType="path"
                     deleteFile={deleteImageFile.bind(null, idx)}
                   />
                 )

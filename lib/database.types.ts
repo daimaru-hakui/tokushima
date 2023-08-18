@@ -245,7 +245,7 @@ export interface Database {
           factory_id: string
           id: string
           image_path: string | null
-          images: Json[] | null
+          images: string[] | null
           position: string
           price: number
           title: string
@@ -261,7 +261,7 @@ export interface Database {
           factory_id: string
           id?: string
           image_path?: string | null
-          images?: Json[] | null
+          images?: string[] | null
           position?: string
           price?: number
           title?: string
@@ -277,7 +277,7 @@ export interface Database {
           factory_id?: string
           id?: string
           image_path?: string | null
-          images?: Json[] | null
+          images?: string[] | null
           position?: string
           price?: number
           title?: string
