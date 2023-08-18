@@ -1,5 +1,4 @@
 import { RepairsTemplateForm } from "@/app/components/repairs/templates/repairs-template-form";
-import React from "react";
 
 const RepairTemplateNew = () => {
   const defaultValues = {

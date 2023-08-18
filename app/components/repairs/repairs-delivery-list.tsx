@@ -9,13 +9,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type Props = {
   setValue: UseFormSetValue<Repair>;
-  isModal: boolean;
-  setIsModal: (payload: boolean) => void;
+  onClose:()=>void
 };
 
 type DeliveryPlace = Database["public"]["Tables"]["delivery_places"]["Row"];
 
-export const RepairsDeliveryList: FC<Props> = ({ setValue, setIsModal }) => {
+export const RepairsDeliveryList: FC<Props> = ({ setValue, onClose }) => {
   const [search, setSearch] = useState("");
   const [deliveryPlaces, setDeliveryPlaces] = useState<DeliveryPlace[] | null>(
     []
@@ -76,8 +75,12 @@ export const RepairsDeliveryList: FC<Props> = ({ setValue, setIsModal }) => {
                     bg="bg-black"
                     size="sm"
                     onClick={() => {
-                      setValue("delivery", name);
-                      setIsModal(false);
+                      setValue(
+                        "delivery",
+                        { id, name },
+                        { shouldValidate: true }
+                      );
+                      onClose()
                     }}
                   >
                     選択

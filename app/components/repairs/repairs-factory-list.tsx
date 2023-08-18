@@ -9,16 +9,14 @@ import { Database } from "@/lib/database.types";
 
 type Props = {
   setValue: UseFormSetValue<Repair | RepairTemplate>;
-  isModal: boolean;
-  setIsModal: (payload: boolean) => void;
+  onClose:()=>void
 };
 
 type Factory = Database["public"]["Tables"]["factories"]["Row"];
 
 export const RepairFactoryList: FC<Props> = ({
   setValue,
-  isModal,
-  setIsModal,
+  onClose
 }) => {
   const [search, setSearch] = useState("");
   const [factories, setFactories] = useState<Factory[] | null>([]);
@@ -79,7 +77,7 @@ export const RepairFactoryList: FC<Props> = ({
                         { id, name },
                         { shouldValidate: true }
                       );
-                      setIsModal(false);
+                      onClose();
                     }}
                   >
                     選択

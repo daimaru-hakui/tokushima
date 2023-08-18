@@ -1,7 +1,10 @@
 "use client";
 
 export const useModal = (setIsModal: (payload: boolean) => void) => {
-  const onOpen = () => setIsModal(true);
+  const onOpen = () => {
+    setIsModal(true)
+    window.document.body.style.overflowY = "hidden";
+  };
   const onClose = () => {
     const modal = document.getElementById("modal");
     if (modal) {

@@ -18,7 +18,6 @@ export const Modal: FC<Props> = ({
   isModal,
   setIsModal,
 }) => {
-
   const onClose = () => {
     const modal = document.getElementById("modal");
     if (modal) {
@@ -42,13 +41,20 @@ export const Modal: FC<Props> = ({
   return (
     <>
       {isModal && (
-        <div id="modal" className={`modal ${styles.modal} ${isModal && styles.isActive}`}>
-          <div className={`modal ${styles.overlay} ${isModal && styles.isActive}`}></div>
-          <div onClick={onClose} className={`${styles.container}`} >
+        <div
+          id="modal"
+          className={`modal ${styles.modal} ${isModal && styles.isActive}`}
+        >
+          <div
+            className={`modal ${styles.overlay} ${isModal && styles.isActive}`}
+          ></div>
+          <div onClick={onClose} className={`${styles.container}`}>
             <div
               onClick={(e) => e.stopPropagation()}
               style={{ width: w }}
-              className={`modal ${styles.content} ${isModal && styles.isActive}`}
+              className={`modal ${styles.content} ${
+                isModal && styles.isActive
+              }`}
             >
               <div className={`${styles.header}`}>
                 <div className={`${styles.title}`}>{title}</div>
@@ -56,7 +62,9 @@ export const Modal: FC<Props> = ({
                   <MdClose className="cursor-pointer" onClick={onClose} />
                 </div>
               </div>
-              <div className={`${styles.body}`}>{children}</div>
+              <div  className={`${styles.body}`}>
+                {children}
+              </div>
             </div>
           </div>
         </div>

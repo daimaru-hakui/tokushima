@@ -22,8 +22,7 @@ export const RepairsFactoryModal: FC<Props> = ({ setValue }) => {
       <Modal w="500px" title="検索" isModal={isModal} setIsModal={setIsModal}>
         <RepairFactoryList
           setValue={setValue}
-          isModal={isModal}
-          setIsModal={setIsModal}
+          onClose={onClose}
         />
       </Modal>
     </>

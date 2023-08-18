@@ -1,16 +1,24 @@
-"use client";
+"use client"
 import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../utils/button";
 import { TextInput } from "../utils/input/text-input";
 import Link from "next/link";
 import { RepairsDetailForm } from "./repairs-detail-form";
-import { Repair } from "@/types";
+import { RepairInputs } from "@/types";
 import { RepairsFactoryModal } from "./repairs-factory-modal";
 import { RepairsDeliveryModal } from "./repairs-delivery-modal";
 import { RepairsContentForm } from "./repairs-content-form";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/database.types";
 
-export const RepairForm: FC = () => {
+type Props = {
+  defaultValues: RepairInputs;
+};
+
+export const RepairForm: FC<Props> = ({ defaultValues }) => {
+  const supabase = createClientComponentClient<Database>();
+  
   const {
     control,
     watch,
@@ -19,42 +27,29 @@ export const RepairForm: FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Repair>({
-    defaultValues: {
-      factory: {
-        id: "",
-        name: ""
-      },
-      delivery: "",
-      deadline: "",
-      customer: "",
-      status: "PICKING",
-
-      repair_details: [
-        {
-          maker: "",
-          productName: "",
-          size: "",
-          quantity: 0,
-          comment: "",
-        },
-      ],
-      repair_contents: [
-        {
-          title: "",
-          image: "",
-        },
-      ],
-    },
+  } = useForm<RepairInputs>({
+    defaultValues,
   });
 
-  const onSubmit: SubmitHandler<Repair> = async (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<RepairInputs> = async (data) => {
+    addRepair(data);
   };
 
-  // const addRepairTemplate = (data) => {
-
-  // };
+  const addRepair = async (repair: RepairInputs) => {
+    const { data: auth } = await supabase.auth.getUser();
+    const { data, error } = await supabase
+      .from("repairs")
+      .insert([
+        {
+          user_id: auth?.user?.id || "", 
+          factory_id: repair.factory.id,
+          deliveryPlace: repair.delivery.id,
+          deadline: repair.deadline,
+          customer: repair.customer,
+        },
+      ])
+      .select();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
@@ -82,7 +77,7 @@ export const RepairForm: FC = () => {
                 className="mt-4 flex-1"
                 type="text"
                 label="納品先"
-                register={{ ...register("delivery", { required: true }) }}
+                register={{ ...register("delivery.name", { required: true }) }}
               />
               <div>
                 <RepairsDeliveryModal setValue={setValue} />

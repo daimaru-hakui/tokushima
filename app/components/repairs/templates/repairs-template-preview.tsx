@@ -8,19 +8,21 @@ type Props = {
   file: any;
   deleteFile?: () => void;
   pathType?: "path" | "file";
-  closeButon?:boolean;
+  closeButon?: boolean;
 };
 
 export const RepairsTemplatePreview: FC<Props> = ({
   file,
   deleteFile,
   pathType = "file",
-  closeButon = true
+  closeButon = true,
 }) => {
   const supabase = createClientComponentClient();
   const [imageUrl, setImageUrl] = useState<any>("");
 
   useEffect(() => {
+    if (pathType !== "path") return;
+    // console.log("file",file)
     const getImage = async (file: string) => {
       const { data, error } = await supabase.storage
         .from("repairs")
@@ -29,9 +31,9 @@ export const RepairsTemplatePreview: FC<Props> = ({
       setImageUrl(data?.signedUrl);
     };
     getImage(file);
-  }, []);
+  }, [supabase.storage, file, pathType]);
 
-  if (!imageUrl && pathType === "path") return;
+  if (pathType === "path" && !imageUrl ) return;
   if (!file && pathType === "file") return;
 
   return (
@@ -41,22 +43,22 @@ export const RepairsTemplatePreview: FC<Props> = ({
         width="100"
         height="100"
         src={
-          pathType === "file"
-             ? URL?.createObjectURL(file || null)
-             : imageUrl
+          pathType === "file" ? URL?.createObjectURL(file || null) : imageUrl
         }
         style={{ width: "100%", height: "auto", objectFit: "cover" }}
         className="p-3 border border-1 border-gray-200"
       />
-      <div className="absolute top-0 right-0 w-[30px] h-[30px] rounded-full bg-white z-1"></div>
       {closeButon && (
-      <div className="absolute top-0 right-0">
-        <IoMdCloseCircle
-          fontSize="36px"
-          className="cursor-pointer"
-          onClick={deleteFile}
-        />
-      </div>
+        <>
+          <div className="absolute top-0 right-0 w-[30px] h-[30px] rounded-full bg-white z-1"></div>
+          <div className="absolute top-0 right-0">
+            <IoMdCloseCircle
+              fontSize="36px"
+              className="cursor-pointer"
+              onClick={deleteFile}
+            />
+          </div>
+        </>
       )}
     </div>
   );

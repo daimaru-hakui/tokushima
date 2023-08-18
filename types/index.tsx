@@ -1,17 +1,22 @@
-export type Repair = {
+export type RepairInputs = {
   factory: {
     id: string;
     name: string;
   };
-  delivery: string;
+  delivery: {
+    id: string;
+    name: string;
+  };
   deadline: string;
   customer: string;
   status: string;
-  category: string;
   repair_contents: {
     title: string;
-    image: string;
+    images: string[];
     price: number;
+    color:string;
+    position:string;
+    comment:string;
   }[];
   repair_details: {
     maker: string;

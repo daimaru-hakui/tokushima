@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { FC, useState, useEffect, use } from "react";
+import React, { FC, useState } from "react";
 import { Modal } from "../utils/modal/modal";
 import {
   Control,
@@ -13,10 +13,10 @@ import {
 import { Repair } from "@/types";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
-import { PiPlusBold } from "react-icons/pi";
 import { FaTrashAlt } from "react-icons/fa";
 import { RepairContentList } from "./repairs-content-list";
-import Image from "next/image";
+import { useModal } from "@/app/hooks/useModal";
+import { RepairContentPreview } from "./repairs-content-preview";
 
 type Inputs = {
   factory: string;
@@ -26,7 +26,7 @@ type Inputs = {
   status: string;
   repair_contents: {
     title: string;
-    image: string;
+    images: string[];
     price: number;
   }[];
   repair_details: {
@@ -53,46 +53,14 @@ export const RepairsContentForm: FC<Props> = ({
   watch,
 }) => {
   const [isModal, setIsModal] = useState(false);
-  const [length, setLength] = useState(0);
-  const { fields, append, remove, update } = useFieldArray({
+  const { onOpen, onClose } = useModal(setIsModal);
+  const { fields, remove } = useFieldArray({
     control,
     name: "repair_contents",
   });
 
-  const addContent = () => {
-    append({
-      title: "",
-      image: "",
-      price: 0,
-    });
-  };
-
   const removeContent = (idx: number) => {
     remove(idx);
-  };
-
-  const onOpen = () => setIsModal(true);
-  useEffect(() => {
-    setLength(watch("repair_contents").length);
-  }, [watch("repair_contents")]);
-
-  const onClose = (idx: number) => {
-    const content = document.getElementById(`content-${idx}`);
-    if (content) {
-      let i = 1;
-      const fadeOut = () => {
-        setTimeout(() => {
-          content.style.transform = `scaleY(${i.toString()})`;
-          i = i - 0.02;
-          if (i < 0) {
-            removeContent(idx);
-            return;
-          }
-          fadeOut();
-        }, 1);
-      };
-      fadeOut();
-    }
   };
 
   return (
@@ -103,98 +71,101 @@ export const RepairsContentForm: FC<Props> = ({
             <div
               id={`content-${idx}`}
               style={{ transformOrigin: "top" }}
-              className="w-full mt-6 p-6 flex items-center justify-between gap-3"
+              className="w-full mt-6 p-6 flex items-center justify-between gap-3 border border-gray-200 rounded-md"
             >
-              <div className="flex gap-3">
-                <div className="w-full">
+              <div className="flex gap-6">
+                <div className="">
                   <Input
                     className="hidden"
-                    register={{ ...register(`repair_contents.${idx}.image`) }}
+                    register={{ ...register(`repair_contents.${idx}.images`) }}
                   />
-                  <Image
-                    width={100}
-                    height={100}
-                    alt=""
-                    src={watch("repair_contents")[idx].image}
-                    className="border border-1 border-gray-100 shadow-sm"
-                  />
-                </div>
-                <div className="w-full">
-                  <div className="p-1 w-full">
-                    <Input
-                      className="hidden"
-                      register={{
-                        ...register(`repair_contents.${idx}.title`, {
-                          required: true,
-                        }),
-                      }}
-                    />
-                    {watch("repair_contents")[idx].title}
+                  <div className="flex gap-3">
+                    {watch("repair_contents")[idx].images.map((image) => (
+                      <RepairContentPreview key={image} image={image} />
+                    ))}
                   </div>
-                  <div className="p-1 w-[100px] flex items-center gap-1">
-                    <Input
-                      className=""
-                      register={{ ...register(`repair_contents.${idx}.price`) }}
-                    />
-                    円
+                </div>
+                <div className="w-full flex flex-col gap-3">
+                  <div className="flex flex-col align-start">
+                    <div className="font-bold text-xs">修理名</div>
+                    <div className="p-1 w-full">
+                      <Input
+                        className="hidden"
+                        register={{
+                          ...register(`repair_contents.${idx}.title`, {
+                            required: true,
+                          }),
+                        }}
+                      />
+                      <div className="flex items-center gap-3 text-sm">
+                        {watch("repair_contents")[idx].title}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex font-bold text-xs">金額</div>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        className="mt-1 w-[100px]"
+                        register={{
+                          ...register(`repair_contents.${idx}.price`),
+                        }}
+                      />
+                      <span>円</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-6">
+                    <div className="flex flex-col">
+                      <div className="flex font-bold text-xs">カラー</div>
+                      <div className="flex items-center gap-3 text-sm">
+                        {watch("repair_contents")[idx].color}
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex font-bold text-xs">位置</div>
+                      <div className="flex items-center gap-3 text-sm">
+                        {watch("repair_contents")[idx].position}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex font-bold text-xs">コメント</div>
+                    <div className="flex items-center gap-3 text-sm">
+                      {watch("repair_contents")[idx].comment}
+                    </div>
                   </div>
                 </div>
               </div>
               <div>
                 <FaTrashAlt
                   className="ml-2 cursor-pointer"
-                  onClick={() => onClose(idx)}
+                  onClick={() => removeContent(idx)}
                 />
               </div>
             </div>
           )}
-          {!watch("repair_contents")[idx].title && (
-            <>
-              <div className="flex items-center mt-6">
-                <Button
-                  type="button"
-                  bg="bg-black"
-                  size="md"
-                  className="w-full"
-                  onClick={onOpen}
-                >
-                  テンプレート
-                </Button>
-                {idx !== 0 && (
-                  <div>
-                    <FaTrashAlt
-                      className="ml-2 cursor-pointer"
-                      onClick={() => removeContent(idx)}
-                    />
-                  </div>
-                )}
-              </div>
-              <Modal
-                w="500px"
-                title="検索"
-                isModal={isModal}
-                setIsModal={setIsModal}
-              >
-                <RepairContentList
-                  setValue={setValue}
-                  isModal={isModal}
-                  setIsModal={setIsModal}
-                  rowIdx={idx}
-                />
-              </Modal>
-            </>
-          )}
         </React.Fragment>
       ))}
-      {(watch("repair_contents")[length - 1]?.title ||
-        watch("repair_contents").length === 0) && (
-        <div className="w-full mt-6 flex justify-center">
-          <Button type="button" size="sm" bg="bg-black" onClick={addContent}>
-            <PiPlusBold className="mr-1" />
-            追加
-          </Button>
-        </div>
-      )}
+
+      <div className="flex items-center mt-6">
+        <Button
+          type="button"
+          bg="bg-black"
+          size="md"
+          className="w-full"
+          onClick={onOpen}
+        >
+          テンプレート
+        </Button>
+      </div>
+      <Modal w="700px" title="検索" isModal={isModal} setIsModal={setIsModal}>
+        <RepairContentList
+          watch={watch}
+          setValue={setValue}
+          onClose={onClose}
+          setIsModal={setIsModal}
+        />
+      </Modal>
     </>
   );
 };
