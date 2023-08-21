@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../utils/button";
@@ -18,7 +18,7 @@ type Props = {
 
 export const RepairForm: FC<Props> = ({ defaultValues }) => {
   const supabase = createClientComponentClient<Database>();
-  
+
   const {
     control,
     watch,
@@ -37,11 +37,11 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
 
   const addRepair = async (repair: RepairInputs) => {
     const { data: auth } = await supabase.auth.getUser();
-    const { data, error } = await supabase
+    const { data: repairs, error: errorRepairs } = await supabase
       .from("repairs")
       .insert([
         {
-          user_id: auth?.user?.id || "", 
+          user_id: auth?.user?.id || "",
           factory_id: repair.factory.id,
           deliveryPlace: repair.delivery.id,
           deadline: repair.deadline,
@@ -49,6 +49,43 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
         },
       ])
       .select();
+    console.log(errorRepairs);
+    if (!repairs) return;
+
+    const { data: repairContents, error: errorContents } = await supabase
+      .from("repair_contents")
+      .insert(
+        repair.repair_contents.map((content) => ({
+          repair_id: repairs[0].id,
+          title: content.title,
+          images: content.images,
+          price: Number(content.price),
+          color: content.color,
+          position: content.position,
+          comment: content.comment,
+        }))
+      )
+      .select();
+    console.log(errorContents)
+
+    const { data: repairDetails, error: errorDetails } = await supabase
+      .from("repair_details")
+      .insert(
+        repair.repair_details.map((detail) => ({
+          repair_id: repairs[0].id,
+          maker: detail.maker,
+          product_name: detail.productName,
+          size: detail.size,
+          quantity: Number(detail.quantity),
+          comment: detail.comment,
+        }))
+      )
+      .select();
+    console.log(errorDetails)
+
+    console.log(repairs);
+    console.log(repairContents);
+    console.log(repairDetails);
   };
 
   return (

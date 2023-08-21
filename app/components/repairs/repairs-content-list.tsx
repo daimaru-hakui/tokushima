@@ -3,14 +3,14 @@ import React, { FC, useState, useEffect } from "react";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { Repair } from "@/types";
+import { RepairInputs } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
 import { RepairContentPreview } from "./repairs-content-preview";
 
 type Props = {
-  watch: UseFormWatch<Repair>;
-  setValue: UseFormSetValue<Repair>;
+  watch: UseFormWatch<RepairInputs>;
+  setValue: UseFormSetValue<RepairInputs>;
   setIsModal: (payload: boolean) => void;
   onClose: () => void;
 };

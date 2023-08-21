@@ -10,7 +10,7 @@ import {
   UseFormWatch,
   useFieldArray,
 } from "react-hook-form";
-import { Repair } from "@/types";
+import { RepairInputs } from "@/types";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { FaTrashAlt } from "react-icons/fa";
@@ -18,32 +18,12 @@ import { RepairContentList } from "./repairs-content-list";
 import { useModal } from "@/app/hooks/useModal";
 import { RepairContentPreview } from "./repairs-content-preview";
 
-type Inputs = {
-  factory: string;
-  delivery: string;
-  deadline: string;
-  customer: string;
-  status: string;
-  repair_contents: {
-    title: string;
-    images: string[];
-    price: number;
-  }[];
-  repair_details: {
-    maker: string;
-    productName: string;
-    size: string;
-    quantity: number;
-    comment: string;
-  }[];
-};
-
 type Props = {
-  setValue: UseFormSetValue<Repair | any>;
-  register: UseFormRegister<Repair>;
-  control: Control<Repair>;
-  getValues: UseFormGetValues<Repair>;
-  watch: UseFormWatch<Repair>;
+  setValue: UseFormSetValue<RepairInputs | any>;
+  register: UseFormRegister<RepairInputs>;
+  control: Control<RepairInputs>;
+  getValues: UseFormGetValues<RepairInputs>;
+  watch: UseFormWatch<RepairInputs>;
 };
 
 export const RepairsContentForm: FC<Props> = ({

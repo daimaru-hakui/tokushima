@@ -11,7 +11,8 @@ import { NumberInput } from "../../utils/input/number-input";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { v4 as uuidv4 } from "uuid";
 import { RepairTemplate } from "@/types";
-import { RepairsTemplatePreview } from "./repairs-template-preview";
+import { RepairsTemplatePathPreview } from "./repairs-template-path-preview";
+import { RepairsTemplateFilePreview } from "./repairs-template-file-preview";
 import { useRouter } from "next/navigation";
 import { Database } from "@/lib/database.types";
 
@@ -280,10 +281,9 @@ export const RepairsTemplateForm: FC<Props> = ({
             {watch("images") &&
               watch("images")?.map(
                 (image:string, idx: number) => (
-                  <RepairsTemplatePreview
+                  <RepairsTemplatePathPreview
                     key={idx}
                     file={image}
-                    pathType="path"
                     deleteFile={deleteImageFile.bind(null, idx)}
                   />
                 )
@@ -310,10 +310,9 @@ export const RepairsTemplateForm: FC<Props> = ({
             {fileUpload?.length > 0 &&
               fileUpload?.map((image: File, idx: number) => (
                 <div key={idx}>
-                  <RepairsTemplatePreview
+                  <RepairsTemplateFilePreview
                     key={idx}
                     file={image}
-                    pathType="file"
                     deleteFile={deletePreviewFile.bind(null, idx)}
                   />
                 </div>
@@ -350,10 +349,9 @@ export const RepairsTemplateForm: FC<Props> = ({
           <div className="mt-3 w-full flex gap-3">
             {fileUpload?.length >= 1 &&
               fileUpload?.map((file: File, idx: number) => (
-                <RepairsTemplatePreview
+                <RepairsTemplateFilePreview
                   key={idx}
                   file={file}
-                  pathType="file"
                   deleteFile={deletePreviewFile.bind(null, idx)}
                 />
               ))}

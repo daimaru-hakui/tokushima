@@ -1,13 +1,9 @@
 import { RepairForm } from "@/app/components/repairs/repairs-form";
 import { Progress } from "@/app/components/utils/progress/progress";
 import { RepairInputs } from "@/types";
-import { Database } from "@/database.types";
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { NextPage } from "next";
 
 const RepairNew: NextPage = async () => {
-  const supabase = createServerComponentClient<Database>({ cookies });
   
  
   const defaultValues: RepairInputs = {

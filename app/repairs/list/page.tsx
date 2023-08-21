@@ -1,153 +1,61 @@
 import { Button } from "@/app/components/utils/button";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import React from "react";
+import { cookies } from "next/headers";
 
-const RepairList = () => {
-  const list = [
-    {
-      serialNumber: 5,
-      status: "FINISH",
-      staff: "向井",
-      customer: "共同リネンサプライ㈱",
-      factory: "徳島工場",
-      contents: [
-        {
-          id: "1",
-          title: "股下修理",
-          price: 120,
-        },
-        {
-          id: 2,
-          title: "ワッペン付け",
-          price: 120,
-        },
-      ],
-      details: [
-        { product_name: "SP2002", size: "S", quantity: 2 },
-        { product_name: "SP2002", size: "M", quantity: 9 },
-      ],
-      delivery_place: "配送センター",
-      deadline: "2023-08-15",
-      created_at: "2023-08-15",
-    },
-    {
-      serialNumber: 4,
-      status: "SHIPPING",
-      staff: "向井",
-      customer: "共同リネンサプライ㈱",
-      factory: "徳島工場",
-      contents: [
-        {
-          id: "1",
-          title: "股下修理",
-          price: 120,
-        },
-        {
-          id: 2,
-          title: "ワッペン付け",
-          price: 120,
-        },
-      ],
-      details: [
-        { product_name: "SP2002", size: "S", quantity: 2 },
-        { product_name: "SP2002", size: "M", quantity: 9 },
-      ],
-      delivery_place: "配送センター",
-      deadline: "2023-08-15",
-      created_at: "2023-08-15",
-    },
-    {
-      serialNumber: 3,
-      status: "PROCESSING",
-      staff: "向井",
-      customer: "共同リネンサプライ㈱",
-      factory: "徳島工場",
-      contents: [
-        {
-          id: "1",
-          title: "股下修理",
-          price: 120,
-        },
-        {
-          id: 2,
-          title: "ワッペン付け",
-          price: 120,
-        },
-      ],
-      details: [
-        { product_name: "SP2002", size: "S", quantity: 2 },
-        { product_name: "SP2002", size: "M", quantity: 9 },
-      ],
-      delivery_place: "配送センター",
-      deadline: "2023-08-15",
-      created_at: "2023-08-15",
-    },
-    {
-      serialNumber: 2,
-      status: "DIRECT",
-      staff: "向井",
-      customer: "日本リプロ㈱",
-      factory: "徳島工場",
-      contents: [
-        {
-          id: "1",
-          title: "股下修理",
-          price: 120,
-        },
-        {
-          id: 2,
-          title: "股下修理",
-          price: 120,
-        },
-      ],
-      details: [
-        { product_name: "SP2002", size: "S", quantity: 5 },
-        { product_name: "SP2002", size: "M", quantity: 9 },
-      ],
-      delivery_place: "配送センター",
-      created_at: "2023-08-15",
-      deadline: "2023-08-15",
-    },
-    {
-      serialNumber: 1,
-      status: "PICKING",
-      staff: "向井",
-      customer: "総合開発",
-      factory: "徳島工場",
-      contents: [
-        {
-          id: "1",
-          title: "股下修理",
-          price: 120,
-        },
-      ],
-      details: [
-        { product_name: "SP2002", size: "S", quantity: 2 },
-        { product_name: "SP2002", size: "M", quantity: 221 },
-      ],
-      delivery_place: "配送センター",
-      created_at: "2023-08-15",
-      deadline: "2023-08-15",
-    },
-  ];
+const supabase = createServerComponentClient({ cookies });
+const getRepairs = async () => {
+  const { data, error } = await supabase.from("repairs").select(`
+  *,
+  repair_contents(title, price, images, color, position, comment),
+  repair_details(maker, product_name, size, quantity, comment)
+  `);
+  if (error) return;
+  return data;
+};
+
+const RepairList = async () => {
+  const repairs = await getRepairs();
+  if (!repairs) return;
 
   const displayStatus = (status: string) => {
     switch (status) {
       case "PICKING":
-        return <div className="p-1 text-xs text-center bg-orange-200 rounded-md">ピッキング</div>;
+        return (
+          <div className="p-1 text-xs text-center bg-orange-200 rounded-md">
+            ピッキング
+          </div>
+        );
       case "DIRECT":
-        return <div className="p-1 text-xs text-center bg-blue-200 rounded-md">工場</div>
+        return (
+          <div className="p-1 text-xs text-center bg-blue-200 rounded-md">
+            工場
+          </div>
+        );
       case "PROCESSING":
-        return <div className="p-1 text-xs text-center bg-green-200 rounded-md">加工中</div>
+        return (
+          <div className="p-1 text-xs text-center bg-green-200 rounded-md">
+            加工中
+          </div>
+        );
       case "SHIPPING":
-        return <div className="p-1 text-xs text-center bg-yellow-200 rounded-md">出荷</div>
+        return (
+          <div className="p-1 text-xs text-center bg-yellow-200 rounded-md">
+            出荷
+          </div>
+        );
       case "FINISH":
-        return <div className="p-1 text-xs text-center bg-gray-200 rounded-md">完了</div>
+        return (
+          <div className="p-1 text-xs text-center bg-gray-200 rounded-md">
+            完了
+          </div>
+        );
     }
   };
 
-  const sumQuantity = (arr: { quantity: number }[]) => {
+  const sumQuantity = (details: { quantity: number }[]) => {
     let total = 0;
-    arr.forEach(({ quantity }: { quantity: number }) => {
+    details?.forEach(({ quantity }: { quantity: number }) => {
       total += quantity;
     });
     return total;
@@ -197,44 +105,41 @@ const RepairList = () => {
           </tr>
         </thead>
         <tbody>
-          {list.map(
+          {repairs.map(
             ({
-              serialNumber,
+              id,
               status,
               staff,
               customer,
               factory,
-              contents,
-              details,
+              repair_contents,
+              repair_details,
               delivery_place,
               created_at,
               deadline,
             }) => (
-              <tr
-                key={serialNumber}
-                className="text-md border-b border-slate-200"
-              >
+              <tr key={id} className="text-md border-b border-slate-200">
                 <td className="p-2">
                   <Button bg="bg-black" size="xs">
                     詳細
                   </Button>
                 </td>
-                <td className="p-2">{serialNumber}</td>
+                <td className="p-2">{id}</td>
                 <td className="p-2">{displayStatus(status)}</td>
                 <td className="p-2">{staff}</td>
                 <td className="p-2 text-left">{customer}</td>
                 <td className="p-2 text-left">{factory}</td>
                 <td className="p-2 text-left">
-                  {contents?.map((content) => (
+                  {repair_contents?.map((content: any) => (
                     <div key={content.id}>{content.title}</div>
                   ))}
                 </td>
                 <td className="p-2 text-left">
-                  {contents?.map((content) => (
+                  {repair_contents?.map((content: any) => (
                     <div key={content.id}>{content.price}円</div>
                   ))}
                 </td>
-                <td className="p-2 text-right">{sumQuantity(details)}</td>
+                <td className="p-2 text-right">{sumQuantity(repair_details)}</td>
                 <td className="p-2">{delivery_place}</td>
                 <td className="p-2">{created_at}</td>
                 <td className="p-2">{deadline}</td>

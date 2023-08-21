@@ -2,13 +2,13 @@
 import React, { FC, useState } from "react";
 import { Modal } from "../utils/modal/modal";
 import { UseFormSetValue } from "react-hook-form";
-import { Repair } from "@/types";
 import { RepairsDeliveryList } from "./repairs-delivery-list";
 import { Button } from "../utils/button";
 import { useModal } from "@/app/hooks/useModal";
+import { RepairInputs } from "@/types";
 
 type Props = {
-  setValue: UseFormSetValue<Repair | any>;
+  setValue: UseFormSetValue<RepairInputs | any>;
 };
 
 export const RepairsDeliveryModal: FC<Props> = ({ setValue }) => {

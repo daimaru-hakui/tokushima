@@ -7,13 +7,14 @@ import { RepairsSidebarList } from "../components/repairs/repairs-sidebar-list";
 import { Space } from "../components/utils/space";
 import { Main } from "../components/main/main";
 import { DrawerSidebar } from "../components/sidebar/drawer-sidebar";
+import { Database } from "@/database.types";
 
 export default async function RepairLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { session },
   } = await supabase.auth.getSession();

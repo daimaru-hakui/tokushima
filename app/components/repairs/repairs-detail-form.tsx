@@ -11,13 +11,13 @@ import {
 import { Button } from "../utils/button";
 import { PiPlusBold } from "react-icons/pi";
 import { FaTrashAlt } from "react-icons/fa";
-import { Repair } from "@/types";
+import { RepairInputs } from "@/types";
 
 type Props = {
-  control: Control<Repair, any>;
-  register: UseFormRegister<Repair>;
-  getValues: UseFormGetValues<Repair>;
-  watch: UseFormWatch<Repair>;
+  control: Control<RepairInputs, any>;
+  register: UseFormRegister<RepairInputs>;
+  getValues: UseFormGetValues<RepairInputs>;
+  watch: UseFormWatch<RepairInputs>;
 };
 
 export const RepairsDetailForm: FC<Props> = ({ control, register }) => {

@@ -1,10 +1,9 @@
-"use server";
 import { RepairsTemplateEdit } from "@/app/components/repairs/templates/repairs-template-edit";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Database } from "@/lib/database.types";
 import { RepairTemplate } from "@/types";
-import { RepairsTemplatePreview } from "@/app/components/repairs/templates/repairs-template-preview";
+import { RepairsTemplatePathPreview } from "@/app/components/repairs/templates/repairs-template-path-preview";
 
 const supabase = createServerComponentClient<Database>({ cookies });
 
@@ -108,10 +107,9 @@ const TemplateById = async ({ params }: { params: { id: string } }) => {
         <div className="mt-3 w-full flex gap-3">
           {repair_template?.images &&
             repair_template?.images?.map((image:string) => (
-              <RepairsTemplatePreview
+              <RepairsTemplatePathPreview
                 key={image}
                 file={image}
-                pathType="path"
                 closeButon={false}
               />
             ))}

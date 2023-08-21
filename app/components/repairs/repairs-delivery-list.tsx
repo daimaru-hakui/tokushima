@@ -3,12 +3,12 @@ import React, { FC, useEffect, useState } from "react";
 import { Button } from "../utils/button";
 import { Input } from "../utils/input/input";
 import { UseFormSetValue } from "react-hook-form";
-import { Repair } from "@/types";
+import { RepairInputs } from "@/types";
 import { Database } from "@/lib/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type Props = {
-  setValue: UseFormSetValue<Repair>;
+  setValue: UseFormSetValue<RepairInputs>;
   onClose:()=>void
 };
 

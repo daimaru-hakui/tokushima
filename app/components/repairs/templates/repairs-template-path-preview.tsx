@@ -5,24 +5,21 @@ import { FC, useEffect, useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 
 type Props = {
-  file: any;
+  file: string;
   deleteFile?: () => void;
-  pathType?: "path" | "file";
   closeButon?: boolean;
 };
 
-export const RepairsTemplatePreview: FC<Props> = ({
+export const RepairsTemplatePathPreview: FC<Props> = ({
   file,
   deleteFile,
-  pathType = "file",
   closeButon = true,
 }) => {
   const supabase = createClientComponentClient();
-  const [imageUrl, setImageUrl] = useState<any>("");
+  const [imageUrl, setImageUrl] = useState<string>();
 
   useEffect(() => {
-    if (pathType !== "path") return;
-    // console.log("file",file)
+    if (!file) return;
     const getImage = async (file: string) => {
       const { data, error } = await supabase.storage
         .from("repairs")
@@ -31,10 +28,9 @@ export const RepairsTemplatePreview: FC<Props> = ({
       setImageUrl(data?.signedUrl);
     };
     getImage(file);
-  }, [supabase.storage, file, pathType]);
+  }, [supabase.storage, file]);
 
-  if (pathType === "path" && !imageUrl ) return;
-  if (!file && pathType === "file") return;
+  if(!imageUrl) return
 
   return (
     <div className="w-full relative">
@@ -42,9 +38,7 @@ export const RepairsTemplatePreview: FC<Props> = ({
         alt=""
         width="100"
         height="100"
-        src={
-          pathType === "file" ? URL?.createObjectURL(file || null) : imageUrl
-        }
+        src={imageUrl}
         style={{ width: "100%", height: "auto", objectFit: "cover" }}
         className="p-3 border border-1 border-gray-200"
       />
