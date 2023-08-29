@@ -20,7 +20,6 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${inter.className} h-[calc(100vh-50px)] bg-gray-100`}>
-        <NavBar />
         {children}
       </body>
     </html>

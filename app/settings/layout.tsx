@@ -4,9 +4,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Sidebar } from "../components/sidebar/sidebar";
 import { SettingsSidebarList } from "../components/settings/settings-sidebar-list";
-import { Space } from "../components/utils/space";
 import { Main } from "../components/main/main";
 import { DrawerSidebar } from "../components/sidebar/drawer-sidebar";
+import NavBar from "../components/header/nav-bar";
 
 export default async function SettingLayout({
   children,
@@ -22,7 +22,7 @@ export default async function SettingLayout({
   }
 
   return (
-    <div className="flex justify-between relative">
+    <div className="flex justify-between relative w-full">
       <DrawerSidebar>
         <SettingsSidebarList />
       </DrawerSidebar>
@@ -30,8 +30,8 @@ export default async function SettingLayout({
         <SettingsSidebarList />
       </Sidebar>
       <Main>
-        <Space />
-        {children}
+        <NavBar />
+        <div className="p-6">{children}</div>
       </Main>
     </div>
   );

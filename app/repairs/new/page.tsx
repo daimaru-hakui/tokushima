@@ -32,7 +32,7 @@ const RepairNew: NextPage = async () => {
   };
 
   return (
-    <div className="mx-auto p-6 w-full max-w-[1100px] shadow-sm bg-white rounded-md">
+    <div className="mx-auto p-6 w-full lg:min-w-full min-w-[1200px] shadow-sm bg-white rounded-md">
       <div className="py-2 mb-6 text-2xl border-b border-gray-200">
         修理伝票作成
       </div>

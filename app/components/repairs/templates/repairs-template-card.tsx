@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers"
-import { Database } from "@/database.types";
+import { Database } from "@/lib/database.types";
 
 type Props = {
   repair_template: any;

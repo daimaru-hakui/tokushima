@@ -8,7 +8,7 @@ import { TbCategory } from "react-icons/tb";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { CardContainer } from "../components/utils/card-container";
+import { Card } from "../components/utils/card";
 
 const SettingPage: NextPage = async () => {
   const supabase = createServerComponentClient({ cookies });
@@ -42,7 +42,13 @@ const SettingPage: NextPage = async () => {
     },
   ];
 
-  return <CardContainer list={list} />;
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto">
+      {list.map(({ name, link, image }) => (
+        <Card key={name} name={name} link={link} image={image} />
+      ))}
+    </div>
+  );
 };
 
 export default SettingPage;

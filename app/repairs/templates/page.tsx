@@ -14,11 +14,11 @@ const RepairTemplates: NextPage = async () => {
 `);
 
   return (
-    <div className="mx-auto p-6 w-full max-w-[1100px] shadow-sm bg-white rounded-md">
+    <div className="mx-auto p-6 w-full lg:min-w-full min-w-[1200px] shadow-sm bg-white rounded-md">
       <div className="py-2 mb-6 text-2xl border-b border-gray-200">
         テンプレート一覧
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-colos-5 gap-6 w-full">
         {repair_templates?.map((template) => (
           <RepairsTemplateCard key={template.id} repair_template={template} />
         ))}

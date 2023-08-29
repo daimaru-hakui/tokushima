@@ -7,16 +7,16 @@ import { PiPlusBold } from "react-icons/pi";
 
 const CategoryPage: NextPage = () => {
   return (
-    <div className="mx-auto p-6 w-full max-w-[500px] shadow-sm bg-white rounded-md">
-      <div className="py-2 mb-6 text-2xl border-b border-gray-200">
-        カテゴリー一覧
+    <div className="mx-auto p-6 w-full shadow-sm bg-white rounded-md overflow-auto">
+      <div className="flex justify-between items-center py-2 mb-6 border-b border-gray-200">
+        <div className="text-2xl ">カテゴリー一覧</div>
+        <Link href="/settings/categories/new" className="inline-block">
+          <Button size="sm" type="button" bg="bg-black">
+            <PiPlusBold className="mr-1" />
+            カテゴリーを追加
+          </Button>
+        </Link>
       </div>
-      <Link href="/settings/categories/new" className="inline-block">
-        <Button size="sm" type="button" bg="bg-black">
-          <PiPlusBold className="mr-1" />
-          カテゴリーを追加
-        </Button>
-      </Link>
       <SettingsRepairCategoryList />
     </div>
   );

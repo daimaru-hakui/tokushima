@@ -4,9 +4,11 @@ import { MenuButton } from "./menu-button";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { DrawerButton } from "./drawer-button";
+import { NavSwitch } from "./nav-switch";
 
 export default async function NavBar() {
   const supabase = createServerComponentClient({ cookies });
+
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -17,11 +19,10 @@ export default async function NavBar() {
   ];
 
   return (
-    <header>
+    <header className="sticky top-0 z-50">
       <nav
-        className="
-        fixed top-0 z-50 w-full bg-white border-b border-gray-200
-        w-full h-[calc(50px)] px-6 
+        className="w-full px-6 bg-white border-b border-gray-200
+        w-full h-[calc(50px)]
         flex items-center justify-between 
         bg-white shadow-sm"
       >
@@ -29,9 +30,12 @@ export default async function NavBar() {
           <div className="block lg:hidden">
             <DrawerButton />
           </div>
-          <Link href="/" className="cursor-pointer">
-            徳島工場
-          </Link>
+          <NavSwitch />
+          <div className="lg:hidden">
+            <Link href="/" className="cursor-pointer">
+              徳島工場
+            </Link>
+          </div>
         </div>
         <div className="flex items-center space-x-6">
           <div className="hidden lg:flex space-x-6">
@@ -42,7 +46,7 @@ export default async function NavBar() {
                 </Link>
               ))}
           </div>
-        <MenuButton menuList={menuList} />
+          <MenuButton menuList={menuList} />
         </div>
       </nav>
     </header>

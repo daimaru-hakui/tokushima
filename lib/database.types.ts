@@ -154,30 +154,42 @@ export interface Database {
       }
       repair_contents: {
         Row: {
+          color: string | null
+          comment: string | null
           created_at: string | null
           id: string
-          image_url: string | null
+          image_path: string | null
+          images: string[]
           is_new: boolean | null
+          position: string | null
           price: number | null
           repair_id: number | null
           title: string | null
           updated_at: string | null
         }
         Insert: {
+          color?: string | null
+          comment?: string | null
           created_at?: string | null
           id?: string
-          image_url?: string | null
+          image_path?: string | null
+          images: string[]
           is_new?: boolean | null
+          position?: string | null
           price?: number | null
           repair_id?: number | null
           title?: string | null
           updated_at?: string | null
         }
         Update: {
+          color?: string | null
+          comment?: string | null
           created_at?: string | null
           id?: string
-          image_url?: string | null
+          image_path?: string | null
+          images?: string[]
           is_new?: boolean | null
+          position?: string | null
           price?: number | null
           repair_id?: number | null
           title?: string | null
@@ -200,7 +212,7 @@ export interface Database {
           maker: string | null
           product_name: string | null
           quantity: number | null
-          repair_id: number | null
+          repair_id: number
           size: string | null
           updated_at: string | null
         }
@@ -211,7 +223,7 @@ export interface Database {
           maker?: string | null
           product_name?: string | null
           quantity?: number | null
-          repair_id?: number | null
+          repair_id: number
           size?: string | null
           updated_at?: string | null
         }
@@ -222,7 +234,7 @@ export interface Database {
           maker?: string | null
           product_name?: string | null
           quantity?: number | null
-          repair_id?: number | null
+          repair_id?: number
           size?: string | null
           updated_at?: string | null
         }
@@ -311,7 +323,7 @@ export interface Database {
           created_at: string | null
           customer: string | null
           deadline: string | null
-          deliveryPlace: string | null
+          delivery_place_id: string
           factory_id: string
           id: number
           product_id: string | null
@@ -324,7 +336,7 @@ export interface Database {
           created_at?: string | null
           customer?: string | null
           deadline?: string | null
-          deliveryPlace?: string | null
+          delivery_place_id: string
           factory_id: string
           id?: number
           product_id?: string | null
@@ -337,7 +349,7 @@ export interface Database {
           created_at?: string | null
           customer?: string | null
           deadline?: string | null
-          deliveryPlace?: string | null
+          delivery_place_id?: string
           factory_id?: string
           id?: number
           product_id?: string | null
@@ -346,6 +358,12 @@ export interface Database {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "repairs_delivery_place_id_fkey"
+            columns: ["delivery_place_id"]
+            referencedRelation: "delivery_places"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "repairs_factory_id_fkey"
             columns: ["factory_id"]

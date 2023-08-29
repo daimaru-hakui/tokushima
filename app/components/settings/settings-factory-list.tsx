@@ -10,8 +10,8 @@ export const SettingsFactoryList: FC = async () => {
     .select("*");
 
   return (
-    <div className="p-6 min-w-[1050px] relative overflow-x-auto bg-white rounded-md shadow-sm">
-      <table className="w-full text-sm text-left text-gray-500">
+    <div className="w-full relative overflow-x-auto bg-white rounded-md shadow-sm">
+      <table className="lg:min-w-full min-w-[1000px] text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase">
           <tr className=" text-xs border-b border-slate-200">
             <th scope="col" className="px-6 py-3 text-left w-[200px]">

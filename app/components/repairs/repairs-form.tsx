@@ -10,7 +10,7 @@ import { RepairsFactoryModal } from "./repairs-factory-modal";
 import { RepairsDeliveryModal } from "./repairs-delivery-modal";
 import { RepairsContentForm } from "./repairs-content-form";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/database.types";
+import { Database } from "@/lib/database.types";
 
 type Props = {
   defaultValues: RepairInputs;
@@ -32,7 +32,9 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
   });
 
   const onSubmit: SubmitHandler<RepairInputs> = async (data) => {
-    addRepair(data);
+    const result = confirm("登録して宜しいでしょうか");
+    if (!result) return;
+    await addRepair(data);
   };
 
   const addRepair = async (repair: RepairInputs) => {
@@ -43,9 +45,10 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
         {
           user_id: auth?.user?.id || "",
           factory_id: repair.factory.id,
-          deliveryPlace: repair.delivery.id,
+          delivery_place_id: repair.delivery.id,
           deadline: repair.deadline,
           customer: repair.customer,
+          status: repair.status,
         },
       ])
       .select();
@@ -66,7 +69,7 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
         }))
       )
       .select();
-    console.log(errorContents)
+    console.log(errorContents);
 
     const { data: repairDetails, error: errorDetails } = await supabase
       .from("repair_details")
@@ -81,11 +84,6 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
         }))
       )
       .select();
-    console.log(errorDetails)
-
-    console.log(repairs);
-    console.log(repairContents);
-    console.log(repairDetails);
   };
 
   return (
@@ -165,13 +163,13 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
               </div>
               <div className="flex items-center">
                 <input
-                  id="DIRECT"
+                  id="FACTORY"
                   type="radio"
-                  value="DIRECT"
+                  value="FACTORY"
                   className="mr-2 w-4 h-4 text-blue-600"
                   {...register("status", { required: true })}
                 />
-                <label htmlFor="DIRECT" className="cursor-pointer">
+                <label htmlFor="FACTORY" className="cursor-pointer">
                   工場直送
                 </label>
               </div>
@@ -201,9 +199,6 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
         </div>
 
         <div className="flex justify-center gap-4">
-          <Button size="sm" type="submit" bg="bg-black" className="mt-10">
-            登録
-          </Button>
           <Link href="/repairs/">
             <Button
               size="sm"
@@ -213,6 +208,9 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
               戻る
             </Button>
           </Link>
+          <Button size="sm" type="submit" bg="bg-black" className="mt-10">
+            登録
+          </Button>
         </div>
       </div>
     </form>

@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Sidebar } from "../components/sidebar/sidebar";
 import { RepairsSidebarList } from "../components/repairs/repairs-sidebar-list";
-import { Space } from "../components/utils/space";
 import { Main } from "../components/main/main";
 import { DrawerSidebar } from "../components/sidebar/drawer-sidebar";
-import { Database } from "@/database.types";
+import NavBar from "../components/header/nav-bar";
+import { Database } from "@/lib/database.types";
 
 export default async function RepairLayout({
   children,
@@ -32,8 +32,8 @@ export default async function RepairLayout({
           <RepairsSidebarList />
         </Sidebar>
         <Main>
-          <Space />
-          {children}
+          <NavBar />
+          <div className="p-6">{children}</div>
         </Main>
       </div>
     </>

@@ -7,10 +7,10 @@ import {
   PiNotebookBold,
   PiFilePlusBold,
 } from "react-icons/pi";
-import { CardContainer } from "../components/utils/card-container";
 import { NextPage } from "next";
+import { Card } from "../components/utils/card";
 
-const Repairs:NextPage = async () => {
+const Repairs: NextPage = async () => {
   const supabase = createServerComponentClient({ cookies });
   const {
     data: { session },
@@ -40,7 +40,13 @@ const Repairs:NextPage = async () => {
       image: <PiFilePlusBold />,
     },
   ];
-  return <CardContainer list={list} />;
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto">
+      {list.map(({ name, link, image }) => (
+        <Card key={name} name={name} link={link} image={image} />
+      ))}
+    </div>
+  );
 };
 
 export default Repairs;

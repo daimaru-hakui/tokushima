@@ -8,7 +8,7 @@ const CategoryNew: NextPage = () => {
     name: "",
   };
   return (
-    <div className="mx-auto p-6 w-full max-w-[500px] shadow-sm bg-white rounded-md">
+    <div className="mx-auto mt-6 p-6 w-full max-w-[500px] shadow-sm bg-white rounded-md">
       <div className="py-2 mb-6 text-2xl border-b border-gray-200">
         カテゴリー登録
       </div>

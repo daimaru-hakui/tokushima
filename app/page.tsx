@@ -1,6 +1,10 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import {cookies} from "next/headers"
 import { redirect } from "next/navigation"
+import NavBar from "./components/header/nav-bar"
+import { DrawerSidebar } from "./components/sidebar/drawer-sidebar"
+import { Sidebar } from "./components/sidebar/sidebar"
+import { Main } from "./components/main/main"
 
 
 export default async function Home() {
@@ -11,8 +15,16 @@ export default async function Home() {
     redirect('/auth/login')
   }
   return (
-    <main className="flex min-h-[calc(100vh-50px)] flex-col items-center justify-between p-24">
-      
-    </main>
+    <div className="flex justify-between relative">
+    <DrawerSidebar>
+      {/* <SettingsSidebarList /> */}
+    </DrawerSidebar>
+    <Sidebar>
+      {/* <SettingsSidebarList /> */}
+    </Sidebar>
+    <Main>
+      <NavBar /> 
+    </Main>
+  </div>
   )
 }
