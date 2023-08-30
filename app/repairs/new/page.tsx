@@ -4,8 +4,7 @@ import { RepairInputs } from "@/types";
 import { NextPage } from "next";
 
 const RepairNew: NextPage = async () => {
-  
- 
+   
   const defaultValues: RepairInputs = {
     factory: {
       id: "",

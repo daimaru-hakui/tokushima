@@ -3,25 +3,35 @@ import { Button } from "../../utils/button";
 import Link from "next/link";
 import Image from "next/image";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import {cookies} from "next/headers"
+import { cookies } from "next/headers";
 import { Database } from "@/lib/database.types";
 
-type Props = {
-  repair_template: any;
+type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
+type Factory = Database["public"]["Tables"]["factories"]["Row"];
+type Cateogry = Database["public"]["Tables"]["repair_categories"]["Row"];
+
+
+interface T extends RepairTemplate{
+  factory:Factory
+  category:Cateogry
+}
+
+interface Props  {
+  repair_template: T;
 };
 
-const getImage = async(file:string[]) => {
-  const supabase = createServerComponentClient<Database>({cookies})
+const getImage = async (file: string[] | null) => {
+  if (!file) return;
+  const supabase = createServerComponentClient<Database>({ cookies });
   const { data, error } = await supabase.storage
-  .from("repairs")
-  .createSignedUrl(file[0], 600);
-  if(error) return
-  return data?.signedUrl
-}
- 
-export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
+    .from("repairs")
+    .createSignedUrl(file[0], 600);
+  if (error) return;
+  return data?.signedUrl;
+};
 
-  const url = await getImage(repair_template.images)
+export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
+  const url = await getImage(repair_template.images);
 
   return (
     <div className="border border-1 border-slate-200 rounded-md shadow-md overflow-hidden">
@@ -29,7 +39,7 @@ export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
         {repair_template.factory?.name}
       </div>
       <div className="flex justify-center w-full">
-        {repair_template.images[0] && (
+        {repair_template.images && repair_template.images[0] && (
           <Image
             src={url || ""}
             width={100}

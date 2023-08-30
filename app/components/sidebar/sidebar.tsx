@@ -1,14 +1,21 @@
 "use client";
-import { useSidebarStore } from "@/store";
+import { useDrawerStore, useSidebarStore } from "@/store";
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import React, { FC } from "react";
 
 type Props = {
-  children: ReactNode;
+  links: {
+    name: string;
+    link: string;
+    icon: JSX.Element;
+  }[];
 };
 
-export const Sidebar: FC<Props> = ({ children }) => {
+export const Sidebar: FC<Props> = ({ links }) => {
+  const pathname = usePathname();
   const isSidebar = useSidebarStore((state) => state.isSidebar);
+  const setIsDrawer = useDrawerStore((state) => state.setIsDrawer);
 
   return (
     <aside
@@ -28,7 +35,21 @@ export const Sidebar: FC<Props> = ({ children }) => {
             徳島工場
           </Link>
         </div>
-        {children}
+        <ul className="space-y-2 font-medium">
+          {links.map(({ name, link, icon }) => (
+            <li key={name} onClick={() => setIsDrawer(false)}>
+              <Link
+                href={link}
+                className={`flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 ${
+                  pathname === link && "bg-gray-100"
+                }`}
+              >
+                <div>{icon}</div>
+                <span className="ml-3">{name}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </aside>
   );

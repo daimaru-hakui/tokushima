@@ -18,7 +18,7 @@ const getTemplates = async (id: string) => {
 
 const TemplateById = async ({ params }: { params: { id: string } }) => {
   const repair_template = await getTemplates(params.id);
-
+  
   const defaultValues: RepairTemplate = {
     id: repair_template?.id,
     factory: {

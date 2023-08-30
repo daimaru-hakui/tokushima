@@ -25,7 +25,7 @@ export const SettingsCustomerList = () => {
             <th scope="col" className="px-6 py-3 text-left">
               顧客名
             </th>
-            <th scope="col" className="px-6 py-3 text-left w-[100px]">
+            <th scope="col" className="px-6 py-3 text-left w-[80px]">
               編集
             </th>
           </tr>

@@ -2,9 +2,12 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import React, { FC } from "react";
 import { cookies } from "next/headers";
 import { SettingsFactoryEdit } from "./settings-factory-edit";
+import { Database } from "@/lib/database.types";
+
+type Factory = Database["public"]["Tables"]["factories"]["Row"];
 
 export const SettingsFactoryList: FC = async () => {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerComponentClient<Database>({ cookies });
   const { data: factories, error } = await supabase
     .from("factories")
     .select("*");
@@ -26,7 +29,7 @@ export const SettingsFactoryList: FC = async () => {
             <th scope="col" className="px-6 py-3 text-left w-[150px]">
               TEL
             </th>
-            <th scope="col" className="px-6 py-3 text-left w-[100px]">
+            <th scope="col" className="px-6 py-3 text-center w-[80px]">
               編集
             </th>
           </tr>
@@ -42,7 +45,7 @@ export const SettingsFactoryList: FC = async () => {
                 <td className="px-6 py-3">{factory.kana}</td>
                 <td className="px-6 py-3">{factory.address}</td>
                 <td className="px-6 py-3">{factory.tel}</td>
-                <td className="px-6 py-3">
+                <td className="px-6 py-3 w-[120px]">
                   <SettingsFactoryEdit factory={factory} />
                 </td>
               </tr>

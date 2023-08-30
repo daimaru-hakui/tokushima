@@ -5,18 +5,15 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { DrawerButton } from "./drawer-button";
 import { NavSwitch } from "./nav-switch";
+import { headerLinks } from "@/app/utils";
+import { NavMenu } from "./nav-menu";
 
-export default async function NavBar() {
+export default async function Header() {
   const supabase = createServerComponentClient({ cookies });
 
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  const menuList = [
-    { name: "HOME", link: "/" },
-    { name: "修理伝票", link: "/repairs" },
-    { name: "マスター登録", link: "/settings" },
-  ];
 
   return (
     <header className="sticky top-0 z-50">
@@ -38,15 +35,8 @@ export default async function NavBar() {
           </div>
         </div>
         <div className="flex items-center space-x-6">
-          <div className="hidden lg:flex space-x-6">
-            {session &&
-              menuList.map(({ name, link }) => (
-                <Link key={name} href={link} className="text-black">
-                  <div>{name}</div>
-                </Link>
-              ))}
-          </div>
-          <MenuButton menuList={menuList} />
+          <NavMenu links={headerLinks} />
+          <MenuButton links={headerLinks} />
         </div>
       </nav>
     </header>

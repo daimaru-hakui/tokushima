@@ -5,10 +5,10 @@ import React, { FC, useState } from "react";
 type Props = {
   name: string;
   link: string;
-  image: any;
+  icon: JSX.Element;
 };
 
-export const Card: FC<Props> = ({ name, link, image }) => {
+export const Card: FC<Props> = ({ name, link, icon }) => {
   const [active, setActive] = useState(false);
 
   const handleMouseOver = (
@@ -36,7 +36,7 @@ export const Card: FC<Props> = ({ name, link, image }) => {
           style={{ color: active ? "white" : "black", fontSize: "50px"}}
           className="flex justify-center"
         >
-          {image}
+          {icon}
         </div>
         <div className="mt-3">{name}</div>
       </div>

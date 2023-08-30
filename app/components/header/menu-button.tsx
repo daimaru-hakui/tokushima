@@ -7,13 +7,14 @@ import { PiGearBold } from "react-icons/pi";
 import Link from "next/link";
 
 type Props = {
-  menuList: {
+  links: {
     name: string;
     link: string;
+    icon: JSX.Element;
   }[];
 };
 
-export const MenuButton: FC<Props> = ({ menuList }) => {
+export const MenuButton: FC<Props> = ({ links }) => {
   const router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -30,17 +31,24 @@ export const MenuButton: FC<Props> = ({ menuList }) => {
       router.refresh();
     }
   };
-
   return (
-    <Menu shadow="md" width={200} zIndex={1000} offset={10}>
+    <Menu
+      shadow="md"
+      width={200}
+      zIndex={1000}
+      offset={5}
+      position="bottom-end"
+    >
       <Menu.Target>
-        <div><PiGearBold className="cursor-pointer" size="30px" /></div>
+        <div>
+          <PiGearBold className="cursor-pointer" size="30px" />
+        </div>
       </Menu.Target>
 
       <Menu.Dropdown>
-        {menuList.map(({ name, link }) => (
+        {links.map(({ name, link, icon }) => (
           <Link key={name} href={link}>
-            <Menu.Item>{name}</Menu.Item>
+            <Menu.Item icon={icon}>{name}</Menu.Item>
           </Link>
         ))}
         <Menu.Item onClick={signOut}>ログアウト</Menu.Item>

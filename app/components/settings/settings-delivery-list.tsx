@@ -7,9 +7,8 @@ import { SettingsDeliveryEdit } from "./settings-delivery-edit";
 type DeliveryPlace = Database["public"]["Tables"]["delivery_places"]["Row"];
 
 async function getDeliveryPlace() {
-  const supabase = createServerComponentClient({ cookies });
-  let { data, error }: { data: DeliveryPlace[] | null; error: any } =
-    await supabase.from("delivery_places").select("*");
+  const supabase = createServerComponentClient<DeliveryPlace>({ cookies });
+  let { data, error } = await supabase.from("delivery_places").select("*");
   return data;
 }
 
@@ -32,8 +31,8 @@ export const SettingsDeliveryList: FC = async () => {
             <th scope="col" className="px-6 py-3 text-left w-[150px]">
               TEL
             </th>
-            <th scope="col" className="px-6 py-3 text-left w-[100px]">
-              詳細
+            <th scope="col" className="px-6 py-3 text-center w-[80px]">
+              編集
             </th>
           </tr>
         </thead>
@@ -47,7 +46,7 @@ export const SettingsDeliveryList: FC = async () => {
               <td className="px-6 py-3">{deliveryPlace.kana}</td>
               <td className="px-6 py-3">{deliveryPlace.address}</td>
               <td className="px-6 py-3">{deliveryPlace.tel}</td>
-              <td className="px-6 py-3">
+              <td className="px-6 py-3 w-[100px]">
                 <SettingsDeliveryEdit deliveryPlace={deliveryPlace} />
               </td>
             </tr>

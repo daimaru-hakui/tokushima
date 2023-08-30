@@ -37,8 +37,6 @@ export const Progress: FC<Props> = ({
     setProgressLength((currentNumber - 1) / (TOTAL - 1));
   }, [currentNumber, TOTAL]);
 
-  console.log("ok")
-
   return (
     <>
       <div className={`${Styles.container} ${className}`}>

@@ -3,11 +3,11 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Sidebar } from "../components/sidebar/sidebar";
-import { RepairsSidebarList } from "../components/repairs/repairs-sidebar-list";
 import { Main } from "../components/main/main";
 import { DrawerSidebar } from "../components/sidebar/drawer-sidebar";
-import NavBar from "../components/header/nav-bar";
+import Header from "../components/header/header";
 import { Database } from "@/lib/database.types";
+import { repairLinks } from "../utils";
 
 export default async function RepairLayout({
   children,
@@ -25,14 +25,10 @@ export default async function RepairLayout({
   return (
     <>
       <div className="flex justify-between relative">
-        <DrawerSidebar>
-          <RepairsSidebarList />
-        </DrawerSidebar>
-        <Sidebar>
-          <RepairsSidebarList />
-        </Sidebar>
+        <DrawerSidebar links={repairLinks} />
+        <Sidebar links={repairLinks} />
         <Main>
-          <NavBar />
+          <Header />
           <div className="p-6">{children}</div>
         </Main>
       </div>

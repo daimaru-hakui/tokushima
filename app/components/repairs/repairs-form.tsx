@@ -6,11 +6,11 @@ import { TextInput } from "../utils/input/text-input";
 import Link from "next/link";
 import { RepairsDetailForm } from "./repairs-detail-form";
 import { RepairInputs } from "@/types";
-import { RepairsFactoryModal } from "./repairs-factory-modal";
 import { RepairsDeliveryModal } from "./repairs-delivery-modal";
 import { RepairsContentForm } from "./repairs-content-form";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
+import { RepairsFactoryModal } from "./repairs-factory-modal";
 
 type Props = {
   defaultValues: RepairInputs;
@@ -99,7 +99,7 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
                 register={{ ...register("factory.name", { required: true }) }}
               />
               <div>
-                <RepairsFactoryModal setValue={setValue} />
+                <RepairsFactoryModal  setValue={setValue}/>
               </div>
             </div>
             {errors.factory && (

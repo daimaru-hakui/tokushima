@@ -1,9 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import {cookies} from "next/headers"
 import { redirect } from "next/navigation"
-import NavBar from "./components/header/nav-bar"
-import { DrawerSidebar } from "./components/sidebar/drawer-sidebar"
-import { Sidebar } from "./components/sidebar/sidebar"
+import Header from "./components/header/header"
 import { Main } from "./components/main/main"
 
 
@@ -16,14 +14,10 @@ export default async function Home() {
   }
   return (
     <div className="flex justify-between relative">
-    <DrawerSidebar>
-      {/* <SettingsSidebarList /> */}
-    </DrawerSidebar>
-    <Sidebar>
-      {/* <SettingsSidebarList /> */}
-    </Sidebar>
+    {/* <DrawerSidebar />
+      <Sidebar /> */}
     <Main>
-      <NavBar /> 
+      <Header /> 
     </Main>
   </div>
   )
