@@ -17,7 +17,7 @@ interface T extends RepairTemplate{
 }
 
 interface Props  {
-  repair_template: T;
+  repair_template: T | any;
 };
 
 const getImage = async (file: string[] | null) => {
