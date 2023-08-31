@@ -23,15 +23,13 @@ export default async function RepairLayout({
   }
 
   return (
-    <>
-      <div className="flex justify-between relative">
-        <DrawerSidebar links={repairLinks} />
-        <Sidebar links={repairLinks} />
-        <Main>
-          <Header />
-          <div className="p-6">{children}</div>
-        </Main>
-      </div>
-    </>
+    <div className="flex justify-between relative">
+      <DrawerSidebar links={repairLinks} />
+      <Sidebar links={repairLinks} />
+      <Main>
+        <Header />
+        <div className="p-6">{children}</div>
+      </Main>
+    </div>
   );
 }

@@ -99,28 +99,37 @@ export interface Database {
           avatar_url: string | null
           created_at: string | null
           email: string | null
-          favorites: string | null
           id: string
+          isAdmin: boolean
+          isDelivery: boolean
+          isSales: boolean
+          isTokushima: boolean
           updated_at: string | null
-          username: string | null
+          username: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
-          favorites?: string | null
           id: string
+          isAdmin?: boolean
+          isDelivery?: boolean
+          isSales?: boolean
+          isTokushima?: boolean
           updated_at?: string | null
-          username?: string | null
+          username: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
-          favorites?: string | null
           id?: string
+          isAdmin?: boolean
+          isDelivery?: boolean
+          isSales?: boolean
+          isTokushima?: boolean
           updated_at?: string | null
-          username?: string | null
+          username?: string
         }
         Relationships: [
           {
@@ -320,7 +329,7 @@ export interface Database {
       repairs: {
         Row: {
           comment: string | null
-          created_at: string | null
+          created_at: string
           customer: string | null
           deadline: string | null
           delivery_place_id: string
@@ -333,7 +342,7 @@ export interface Database {
         }
         Insert: {
           comment?: string | null
-          created_at?: string | null
+          created_at?: string
           customer?: string | null
           deadline?: string | null
           delivery_place_id: string
@@ -346,7 +355,7 @@ export interface Database {
         }
         Update: {
           comment?: string | null
-          created_at?: string | null
+          created_at?: string
           customer?: string | null
           deadline?: string | null
           delivery_place_id?: string

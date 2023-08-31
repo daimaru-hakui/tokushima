@@ -7,8 +7,8 @@ import { format } from "date-fns";
 import { Database } from "@/lib/database.types";
 import Link from "next/link";
 
-const supabase = createServerComponentClient<Database>({ cookies });
 const getRepairs = async () => {
+  const supabase = createServerComponentClient<Database>({ cookies });
   const { data, error } = await supabase.from("repairs").select(`
   *,
   profiles(username),
@@ -16,7 +16,7 @@ const getRepairs = async () => {
   delivery_places(id,name),
   repair_contents(title, price, images, color, position, comment),
   repair_details(maker, product_name, size, quantity, comment)
-  `);
+  `).order("created_at",{ascending:false});
   if (error) return;
   return data;
 };
@@ -34,8 +34,6 @@ const RepairList = async () => {
     });
     return total;
   };
-
-  console.log(repairs);
 
   return (
     <div className="mx-auto p-6 shadow-sm bg-white rounded-md overflow-auto">

@@ -14,7 +14,7 @@ import {
 import { TbCategory } from "react-icons/tb";
 
 export const headerLinks = [
-  { name: "HOME", link: "/", icon: <PiHouse /> },
+  { name: "ホーム", link: "/", icon: <PiHouse /> },
   { name: "修理伝票", link: "/repairs", icon: <PiNotepadBold /> },
   { name: "マスター登録", link: "/settings", icon: <PiDatabaseBold /> },
 ];

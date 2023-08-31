@@ -4,6 +4,7 @@ import { Menu } from "@mantine/core";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { PiGearBold } from "react-icons/pi";
+import { RiAdminLine } from "react-icons/ri";
 import Link from "next/link";
 
 type Props = {
@@ -51,6 +52,10 @@ export const MenuButton: FC<Props> = ({ links }) => {
             <Menu.Item icon={icon}>{name}</Menu.Item>
           </Link>
         ))}
+        <Menu.Item icon={<RiAdminLine />}>
+          <Link href="/admin">管理者</Link>
+        </Menu.Item>
+        <Menu.Divider />
         <Menu.Item onClick={signOut}>ログアウト</Menu.Item>
       </Menu.Dropdown>
     </Menu>

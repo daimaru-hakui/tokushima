@@ -5,18 +5,19 @@ import { Database } from "@/lib/database.types";
 import { RepairTemplate } from "@/types";
 import { RepairsTemplatePathPreview } from "@/app/components/repairs/templates/repairs-template-path-preview";
 
-const supabase = createServerComponentClient<Database>({ cookies });
-
-const getTemplates = async (id: string) => {
-  const { data, error } = await supabase
-    .from("repair_templates")
-    .select(`*,repair_categories(id,name),factories(id,name)`)
-    .eq("id", id)
-    .single();
-  return data;
-};
 
 const TemplateById = async ({ params }: { params: { id: string } }) => {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  
+  const getTemplates = async (id: string) => {
+    const { data, error } = await supabase
+      .from("repair_templates")
+      .select(`*,repair_categories(id,name),factories(id,name)`)
+      .eq("id", id)
+      .single();
+    return data;
+  };
+  
   const repair_template = await getTemplates(params.id);
   
   const defaultValues: RepairTemplate = {

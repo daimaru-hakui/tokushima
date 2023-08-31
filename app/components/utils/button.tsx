@@ -33,7 +33,7 @@ export const Button: FC<Props> = ({
     <button
       onClick={onClick}
       type={type}
-      className={`${w} flex items-center justify-center font-semibold rounded-md shadow-sm cursor-pointer ${color} ${bg} ${sizeObj[size]} hover:opacity-80 ${className}`}
+      className={`${w} flex items-center justify-center font-semibold rounded-md cursor-pointer ${color} ${bg} ${sizeObj[size]} hover:opacity-80 ${className}`}
     >
       {children}
     </button>

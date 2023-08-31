@@ -7,36 +7,32 @@ import { cookies } from "next/headers";
 import { Database } from "@/lib/database.types";
 
 type RepairTemplate = Database["public"]["Tables"]["repair_templates"]["Row"];
-type Factory = Database["public"]["Tables"]["factories"]["Row"];
-type Cateogry = Database["public"]["Tables"]["repair_categories"]["Row"];
 
-
-interface T extends RepairTemplate{
-  factory:Factory
-  category:Cateogry
+interface Repair extends RepairTemplate {
+  factories: { id: string; name: string } | null;
+  repair_categories: { id: string; name: string } | null;
 }
 
-interface Props  {
-  repair_template: T | any;
-};
-
-const getImage = async (file: string[] | null) => {
-  if (!file) return;
-  const supabase = createServerComponentClient<Database>({ cookies });
-  const { data, error } = await supabase.storage
-    .from("repairs")
-    .createSignedUrl(file[0], 600);
-  if (error) return;
-  return data?.signedUrl;
-};
+interface Props {
+  repair_template: Repair;
+}
 
 export const RepairsTemplateCard: FC<Props> = async ({ repair_template }) => {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const getImage = async (file: string[] | null) => {
+    if (!file) return;
+    const { data, error } = await supabase.storage
+      .from("repairs")
+      .createSignedUrl(file[0], 600);
+    if (error) return;
+    return data?.signedUrl;
+  };
   const url = await getImage(repair_template.images);
 
   return (
     <div className="border border-1 border-slate-200 rounded-md shadow-md overflow-hidden">
       <div className="py-1 flex justify-center text-sm font-bold bg-gray-100">
-        {repair_template.factory?.name}
+        {repair_template.factories?.name}
       </div>
       <div className="flex justify-center w-full">
         {repair_template.images && repair_template.images[0] && (

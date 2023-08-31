@@ -7,7 +7,7 @@ type Props = {
   label?: string;
   register?: any;
   className?: string;
-  onChange?:Function
+  onChange?:Function;
 };
 
 export const Input: FC<Props> = ({
@@ -17,7 +17,7 @@ export const Input: FC<Props> = ({
   label = "",
   register,
   className,
-  onChange
+  onChange,
 }) => {
   return (
     <div className={className}>
