@@ -49,6 +49,7 @@ export const RepairForm: FC<Props> = ({ defaultValues }) => {
           deadline: repair.deadline,
           customer: repair.customer,
           status: repair.status,
+          comment:repair.comment
         },
       ])
       .select();

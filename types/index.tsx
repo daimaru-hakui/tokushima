@@ -14,9 +14,9 @@ export type RepairInputs = {
     title: string;
     images: string[];
     price: number;
-    color:string;
-    position:string;
-    comment:string;
+    color: string;
+    position: string;
+    comment: string;
   }[];
   repair_details: {
     maker: string;
@@ -25,6 +25,7 @@ export type RepairInputs = {
     quantity: number;
     comment: string;
   }[];
+  comment: string;
 };
 
 export type RepairTemplate = {

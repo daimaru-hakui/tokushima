@@ -73,7 +73,11 @@ const RepairListById = async ({ params }: { params: { id: string } }) => {
       </div>
 
       <RepairDetailTable details={repair.repair_details} />
-      <RepairContentsTable contents={repair.repair_contents}/>
+      <RepairContentsTable contents={repair.repair_contents} />
+      <div className="mt-6 p-6 pt-3 w-full text-sm text-lef border-spacing-2 border border-slate-200 bg-neutral-50 whitespace-pre-wrap">
+        <div className="font-bold text-xs">コメント:</div>
+        <div className="mt-3">{repair.comment}</div>
+      </div>
     </div>
   );
 };

@@ -28,6 +28,7 @@ const RepairNew: NextPage = async () => {
       },
     ],
     repair_contents: [],
+    comment:""
   };
 
   return (
